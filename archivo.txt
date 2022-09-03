@@ -1,0 +1,11 @@
+HOLA MUY BUENAS
+ESTE ES EL ARCHIOVO 
+ESTA LINEA 3
+4
+5
+6
+
+//-------------------//
+PASAME LA HOOKAAAA
+def holaMundo():
+    print("hello world xd")
