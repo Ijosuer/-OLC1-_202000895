@@ -1,0 +1,24 @@
+inicio
+Ingresar _variable1_      coMo NumEro cOn_valor 5;
+Ingresar variable1_      coMo NumEro cOn_valor 5;
+Ingresar variable1_      coMo cadena cOn_valor "HOLA MI REY XD";
+fin
+
+
+
+INICIO
+imprimir("holaMudno")
+FIN 
+/////inicio de la traduccion
+
+/*
+        Primer archivo de entrada para proyecto organizacion de lenguajes y compiladores 1
+*/
+//josue123 + dan______ +5
+
+//seccion de declraciones  de variables
+//Ingresar _variable1_      coMo NumEro cOn_valor 5;
+//Ingresar variable1_      coMo NumEro cOn_valor 5;
+//Ingresar variable1_      coMo cadena cOn_valor "HOLA MI REY XD";
+
+

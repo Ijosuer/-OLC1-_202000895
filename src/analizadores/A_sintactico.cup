@@ -1,0 +1,96 @@
+package analizadores;
+import java_cup.runtime.Symbol;
+
+parser code 
+{:
+    //ESte es para llamar
+    public static void print(Object s){
+        String newOne = s.toString();
+        System.out.println("print(\""+newOne+"\")");
+    }
+    /**
+     * Método al que se llama automáticamente ante algún error sintactico.
+     **/ 
+    public void syntax_error(Symbol s){ 
+            System.err.println("Error Sintáctico en la Línea " + (s.left) +" Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
+    /**
+     * Método al que se llama en el momento en que ya no es posible una recuperación de errores.
+     **/ 
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+            System.err.println("Error síntactico irrecuperable en la Línea " + (s.left)+ " Columna "+s.right+". Componente " + s.value + " no reconocido."); 
+    }  
+:}
+
+terminal String IDENTIFICADOR, ENTERO,CARACTER,DECIMAL,res_VERDADERO,res_FALSO, BLANCOS;
+terminal String res_INICIO, res_FIN,res_SI,res_COMO,res_ELSEIF,res_PARA,res_SEGUN;
+terminal String res_HACER, res_HASTA, res_NUMERO, res_FINSI,res_METODO,res_REPETIR;
+terminal String res_FINPARA,res_INGRESAR,res_IMPRIMIR,res_CARACTER,res_RETORNAR,res_ENTONCES;
+terminal String res_EJECUTAR,res_MIENTRAS,res_FINSEGUN,res_CONVALOR,res_HASTAQ,res_FINMETODO;
+terminal String res_FINFUNCION,res_IMPRIMIRNL,res_FINMIENTRAS,res_FUNCION,res_CONINCREM;
+terminal String res_ELSE,res_METODOCONP,res_CADENA,res_BOOLEAN;
+
+terminal String tk_MAS,tk_DIVIDIDO,tk_POR,tk_PTCOMA,tk_LLAVIZQ,tk_LLAVDER ;
+terminal String tk_PARIZQ, tk_PARDER, tk_MENOS, tk_CONCAT,tk_MENQUE,tk_MAYQUE, tk_IGUAL;
+terminal String tk_CADENA,tk_INCREMENTO,tk_DECREMENTO,tk_ASIGNAFLECHA;
+
+
+
+non terminal INICIO, I,I_,BEGIN, LLAMA,LLAMA_;
+
+
+start with INICIO;
+
+INICIO::= res_INICIO BEGIN res_FIN;
+
+
+BEGIN::= res_INGRESAR
+       | res_IMPRIMIR tk_PARIZQ tk_CADENA:a tk_PARDER{: print(a); :}
+       | res_IMPRIMIRNL tk_PARIZQ tk_CADENA tk_PARDER 
+       | res_HACER
+       | res_SI
+       | res_MIENTRAS
+       | res_PARA
+       | res_REPETIR
+       | res_SEGUN
+       | res_METODO
+       | res_FUNCION
+       | error
+;             
+
+I::= res_INGRESAR IDENTIFICADOR res_COMO I_ tk_PTCOMA 
+;
+I_::= res_NUMERO res_CONVALOR ENTERO
+    | res_NUMERO res_CONVALOR DECIMAL
+    | res_CADENA res_CONVALOR tk_CADENA
+    | res_BOOLEAN res_CONVALOR res_VERDADERO
+    |  res_INGRESAR IDENTIFICADOR res_COMO res_BOOLEAN res_CONVALOR res_VERDADERO tk_PTCOMA
+;
+LLAMA ::=  LLAMA LLAMA_
+        |  res_INGRESAR IDENTIFICADOR res_COMO res_BOOLEAN res_CONVALOR res_VERDADERO tk_PTCOMA
+        | res_INGRESAR IDENTIFICADOR res_COMO res_CADENA res_CONVALOR tk_CADENA tk_PTCOMA
+        | res_INGRESAR IDENTIFICADOR res_COMO res_NUMERO res_CONVALOR ENTERO tk_PTCOMA
+;
+LLAMA_::= res_INGRESAR IDENTIFICADOR res_COMO res_NUMERO res_CONVALOR ENTERO tk_PTCOMA 
+        | res_INGRESAR IDENTIFICADOR res_COMO res_CADENA res_CONVALOR tk_CADENA tk_PTCOMA
+        | error 
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,6 +5,8 @@
  */
 package PseudoParser;
 
+import analizadores.Analizador_Lexico;
+import analizadores.Analizador_sintactico;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -13,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -127,7 +131,7 @@ public class Form extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(102, 102, 255));
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Project 1 OLC1                                                                                                                                By: iJosuer ");
+        jLabel1.setText("Project 1 OLC1                                                                                                                                  By: iJosuer ");
         jLabel1.setOpaque(true);
 
         textArea2.setBackground(new java.awt.Color(204, 204, 204));
@@ -213,14 +217,14 @@ public class Form extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                             .addGap(15, 15, 15)
                             .addComponent(btClean)
-                            .addGap(414, 414, 414)
+                            .addGap(441, 441, 441)
                             .addComponent(btStart, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1249, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -325,6 +329,7 @@ public class Form extends javax.swing.JFrame {
     private void btStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStartActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this.rootPane, "Proceso de compilacion DONE(:");
+        
     }//GEN-LAST:event_btStartActionPerformed
 
     private void btPythonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPythonActionPerformed
@@ -341,8 +346,17 @@ public class Form extends javax.swing.JFrame {
             
 //        -------------------------------
         String text  = textArea1.getText();
-        textArea1.setText("");
-        textArea2.setText(text);
+        String mensaje = "HOLA COMO ESTAS";
+        try {
+            Analizador_Lexico lexico = new Analizador_Lexico(
+                    new BufferedReader(new StringReader(text))
+            );
+            Analizador_sintactico sintactico = new Analizador_sintactico(lexico);
+            sintactico.parse();
+            
+        } catch (Exception e) {
+        }   
+//        textArea2.setText(text);
         
     }//GEN-LAST:event_btCleanActionPerformed
 
