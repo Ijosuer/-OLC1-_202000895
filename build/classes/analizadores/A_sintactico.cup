@@ -7,6 +7,7 @@ parser code
     public static void print(Object s){
         String newOne = s.toString();
         System.out.println("print(\""+newOne+"\")");
+        
     }
     /**
      * Método al que se llama automáticamente ante algún error sintactico.
@@ -30,51 +31,53 @@ terminal String res_EJECUTAR,res_MIENTRAS,res_FINSEGUN,res_CONVALOR,res_HASTAQ,r
 terminal String res_FINFUNCION,res_IMPRIMIRNL,res_FINMIENTRAS,res_FUNCION,res_CONINCREM;
 terminal String res_ELSE,res_METODOCONP,res_CADENA,res_BOOLEAN;
 
-terminal String tk_MAS,tk_DIVIDIDO,tk_POR,tk_PTCOMA,tk_LLAVIZQ,tk_LLAVDER ;
+terminal String tk_MAS,tk_DIVIDIDO,tk_POR,tk_PTCOMA,tk_COMA,tk_LLAVIZQ,tk_LLAVDER ;
 terminal String tk_PARIZQ, tk_PARDER, tk_MENOS, tk_CONCAT,tk_MENQUE,tk_MAYQUE, tk_IGUAL;
 terminal String tk_CADENA,tk_INCREMENTO,tk_DECREMENTO,tk_ASIGNAFLECHA;
 
 
 
-non terminal INICIO, I,I_,BEGIN, LLAMA,LLAMA_;
-
+non terminal INICIO,RECURSIVE,BEGIN,DECLARA,ASIGNA,CONDICION,SWITCH,FOR,WHILE,HASTA,METODO,FUNCION,PRINT;
+non terminal LISTID;
 
 start with INICIO;
 
-INICIO::= res_INICIO BEGIN res_FIN;
+INICIO::= res_INICIO RECURSIVE res_FIN;
 
+RECURSIVE::= BEGIN RECURSIVE
+           | BEGIN
+;
 
-BEGIN::= res_INGRESAR
-       | res_IMPRIMIR tk_PARIZQ tk_CADENA:a tk_PARDER{: print(a); :}
-       | res_IMPRIMIRNL tk_PARIZQ tk_CADENA tk_PARDER 
-       | res_HACER
-       | res_SI
-       | res_MIENTRAS
-       | res_PARA
-       | res_REPETIR
-       | res_SEGUN
-       | res_METODO
-       | res_FUNCION
+BEGIN::= DECLARA
+       | ASIGNA
+       | CONDICION
+       | SWITCH
+       | FOR
+       | WHILE
+       | HASTA
+       | METODO
+       | FUNCION
+       | PRINT
        | error
-;             
+;
 
-I::= res_INGRESAR IDENTIFICADOR res_COMO I_ tk_PTCOMA 
+DECLARA::= res_INGRESAR LISTID res_COMO res_CADENA res_CONVALOR tk_CADENA tk_PTCOMA
+         | res_INGRESAR LISTID res_COMO res_NUMERO res_CONVALOR ENTERO tk_PTCOMA
+         | res_INGRESAR LISTID res_COMO res_NUMERO res_CONVALOR DECIMAL tk_PTCOMA
+         | res_INGRESAR LISTID res_COMO res_BOOLEAN res_CONVALOR res_VERDADERO tk_PTCOMA
+         | res_INGRESAR LISTID res_COMO res_BOOLEAN res_CONVALOR res_FALSO tk_PTCOMA
+         
 ;
-I_::= res_NUMERO res_CONVALOR ENTERO
-    | res_NUMERO res_CONVALOR DECIMAL
-    | res_CADENA res_CONVALOR tk_CADENA
-    | res_BOOLEAN res_CONVALOR res_VERDADERO
-    |  res_INGRESAR IDENTIFICADOR res_COMO res_BOOLEAN res_CONVALOR res_VERDADERO tk_PTCOMA
+
+LISTID::= LISTID tk_COMA IDENTIFICADOR
+        | IDENTIFICADOR
 ;
-LLAMA ::=  LLAMA LLAMA_
-        |  res_INGRESAR IDENTIFICADOR res_COMO res_BOOLEAN res_CONVALOR res_VERDADERO tk_PTCOMA
-        | res_INGRESAR IDENTIFICADOR res_COMO res_CADENA res_CONVALOR tk_CADENA tk_PTCOMA
-        | res_INGRESAR IDENTIFICADOR res_COMO res_NUMERO res_CONVALOR ENTERO tk_PTCOMA
+
+PRINT::= res_IMPRIMIR tk_PARIZQ tk_CADENA:a tk_PARDER tk_PTCOMA{: print(a); :}
+       | res_IMPRIMIRNL tk_PARIZQ tk_CADENA:a tk_PARDER tk_PTCOMA {: print(a); :}
 ;
-LLAMA_::= res_INGRESAR IDENTIFICADOR res_COMO res_NUMERO res_CONVALOR ENTERO tk_PTCOMA 
-        | res_INGRESAR IDENTIFICADOR res_COMO res_CADENA res_CONVALOR tk_CADENA tk_PTCOMA
-        | error 
-;
+
+
 
 
 

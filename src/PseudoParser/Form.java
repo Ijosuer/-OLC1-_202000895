@@ -71,7 +71,6 @@ public class Form extends javax.swing.JFrame {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(bgColor);
         g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
-
     }
 }
     

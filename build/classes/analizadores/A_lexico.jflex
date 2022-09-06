@@ -24,7 +24,8 @@ import java_cup.runtime.*;
 
 CARACTER   =   [\']([^\t\'\"\n]|(\\\")|(\\n)|(\\\')|(\\t))?[\']  
 BLANCOS=[ \r\t]+
-CADENA = [\"]([^\"\n]|(\\\"))*[\"]
+CADENA = [\"]([^\"]|(\\\"))*[\"]
+
 D=[0-9]+
 DD=[0-9]+("."[  |0-9]+)?
 ID=["_"A-Za-z]+["_"0-9A-Za-z]*
@@ -62,7 +63,6 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 
 "para"          {System.out.println("Reconocio RES:PARA");return new Symbol(sym.res_PARA,yyline,yychar, yytext());} 
 "hasta"          {return new Symbol(sym.res_HASTA,yyline,yychar, yytext());} 
-"hacer"          {System.out.println("Reconocio RES:HACER");return new Symbol(sym.res_HACER,yyline,yychar, yytext());} 
 "con_incremental"          {return new Symbol(sym.res_CONINCREM,yyline,yychar, yytext());} 
 "fin_para"          {return new Symbol(sym.res_FINPARA,yyline,yychar, yytext());} 
 "mientras"          {System.out.println("Reconocio RES:WHILE"); return new Symbol(sym.res_MIENTRAS,yyline,yychar, yytext());} 
@@ -95,6 +95,7 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 "fin_segun"                {return new Symbol(sym.res_FINSEGUN,yyline,yychar, yytext());} 
 
 ";" {System.out.println("Reconocio token:<tk_PTCOMA>lexema:"+yytext());return new Symbol(sym.tk_PTCOMA,yyline,yychar, yytext());} 
+"," {System.out.println("Reconocio token:<tk_COMA>");return new Symbol(sym.tk_COMA,yyline,yychar, yytext());} 
 "{" {System.out.println("Reconocio token:<tk_LLAVIZQ>"+yytext());return new Symbol(sym.tk_LLAVIZQ,yyline,yychar, yytext());} 
 "}" {System.out.println("Reconocio token:<tk_LLAVDER> lexema:"+yytext());return new Symbol(sym.tk_LLAVDER,yyline,yychar, yytext());} 
 "(" {System.out.println("Reconocio token:<tk_PARIZQ>lexema:"+yytext());return new Symbol(sym.tk_PARIZQ,yyline,yychar, yytext());} 
