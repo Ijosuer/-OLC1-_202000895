@@ -96,10 +96,10 @@ fin_si
 
 si _v1_ es_igual _v2_ entonces
 	imprimir_nl "no tiene que imprimir este mensaje";
-		o_si _v1_ es_igual 13 entonces
-		    imprimir_nl "mensaje de prueba";
-		o_si _v1_ es_igual 14 entonces
-		    imprimir_nl "mensaje de prueba";
+        o_si _v1_ es_igual 13 entonces
+            imprimir_nl "mensaje de prueba";
+        o_si _v1_ es_igual 14 entonces
+            imprimir_nl "mensaje de prueba";
 	de_lo_contrario
 	    imprimir_nl "este print es un ejemplo";
 fin_si
