@@ -7,6 +7,8 @@ package PseudoParser;
 
 import analizadores.Analizador_Lexico;
 import analizadores.Analizador_sintactico;
+import arbol.AST;
+import arbol.Nodo;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -17,6 +19,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -28,7 +33,7 @@ import javax.swing.JPanel;
  * @author josue
  */
 public class Form extends javax.swing.JFrame {
-
+    ArrayList<String> variables = new ArrayList<String>();
     /**
      * Creates new form Form
      */
@@ -73,6 +78,23 @@ public class Form extends javax.swing.JFrame {
         g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
     }
 }
+    public void encontrar_variables(Nodo nodo){
+        
+        for(Nodo instruccion : nodo.hijos){
+            
+            if(instruccion.token == "INSTRUCCION"){
+                for(Nodo declaracion : instruccion.hijos){
+                    if(declaracion.token == "tk_cadena"){
+                        variables.add(declaracion.lexema);
+                    }
+                }
+            }
+            
+            if(instruccion.lexema == "" ){
+                encontrar_variables(instruccion);
+            }
+        }
+    }
     
     
     /**
@@ -343,17 +365,26 @@ public class Form extends javax.swing.JFrame {
 //        JOptionPane.showMessageDialog(this.rootPane, "Hello world");
             
 //        -------------------------------
+        Nodo raiz = null;
         String text  = textArea1.getText();
-        String mensaje = "HOLA COMO ESTAS";
         try {
             Analizador_Lexico lexico = new Analizador_Lexico(
                     new BufferedReader(new StringReader(text))
             );
             Analizador_sintactico sintactico = new Analizador_sintactico(lexico);
             sintactico.parse();
-            
-        } catch (Exception e) {
+                raiz = sintactico.getRaiz();
+                System.out.println("Todo Correcto ");
+        } catch (Exception ex) {
+            Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
         }   
+        if(raiz != null){
+            variables.clear();
+            encontrar_variables(raiz);
+            
+            AST arbol = new AST(raiz);
+            arbol.GraficarSintactico();
+        }
 //        textArea2.setText(text);
         
     }//GEN-LAST:event_btCleanActionPerformed

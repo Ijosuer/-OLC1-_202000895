@@ -1,40 +1,29 @@
+
 package analizadores;
+
 import java_cup.runtime.Symbol;
 import arbol.Imprimir;
+import java.util.LinkedList;
+import arbol.Nodo;
 
 parser code 
 {:
-
-    Imprimir objeto = new Imprimir();
-
-    //Guardar Expresiones num
-    public static void CALL(){
-        Imprimir objeto = new Imprimir();
-}
-    public static void token(Object s){ 
-            //System.out.println(" Línea " + (s.left) +" Columna "+s.right); 
-            System.out.println(s); 
-    } 
-    
-
-    //ESte es para llamar
-    public static void print(Object s){
-        String newOne = s.toString();
-        System.out.println("print(\""+newOne+"\")");
+        public static Nodo raiz;
         
-    }
-    /**
-     * Método al que se llama automáticamente ante algún error sintactico.
-     **/ 
-    public void syntax_error(Symbol s){ 
-            System.err.println("Error Sintáctico en la Línea " + (s.left) +" Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
-    } 
-    /**
-     * Método al que se llama en el momento en que ya no es posible una recuperación de errores.
-     **/ 
-    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-            System.err.println("Error síntactico irrecuperable en la Línea " + (s.left)+ " Columna "+s.right+". Componente " + s.value + " no reconocido."); 
-    }  
+        public Nodo getRaiz(){
+            return raiz;
+        }
+        
+
+        public void syntax_error(Symbol s)
+        {
+            System.err.println("Error en la Linea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
+        }
+
+        public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+        {
+            System.err.println("Error en la Linea " + (s.right+1)+ " Columna "+(s.left+1)+". Identificador " +s.value + " no reconocido.");
+        }
 :}
 
 terminal String IDENTIFICADOR, ENTERO,CARACTER,DECIMAL,res_VERDADERO,res_FALSO, BLANCOS;
@@ -44,28 +33,43 @@ terminal String res_FINPARA,res_INGRESAR,res_IMPRIMIR,res_CARACTER,res_RETORNAR,
 terminal String res_EJECUTAR,res_MIENTRAS,res_FINSEGUN,res_CONVALOR,res_HASTAQ,res_FINMETODO;
 terminal String res_FINFUNCION,res_IMPRIMIRNL,res_FINMIENTRAS,res_FUNCION,res_CONINCREM;
 terminal String res_ELSE,res_METODOCONP,res_CADENA,res_BOOLEAN,res_POTENCIA,res_MOD;
-terminal Sring res_MAYOR,res_MENOR,res_MENORIGUAL,res_MAYORIGUAL,res_ESIGUAL,res_ESDIFERENTE,res_OR,res_AND,res_NOT;
+terminal String res_MAYOR,res_MENOR,res_MENORIGUAL,res_MAYORIGUAL,res_ESIGUAL,res_ESDIFERENTE,res_OR,res_AND,res_NOT;
 
 terminal String tk_MAS,tk_DIVIDIDO,tk_POR,tk_PTCOMA,tk_COMA,tk_LLAVIZQ,tk_LLAVDER ;
 terminal String tk_PARIZQ, tk_PARDER, tk_MENOS, tk_CONCAT,tk_MENQUE,tk_MAYQUE, tk_IGUAL;
 terminal String tk_CADENA,tk_INCREMENTO,tk_DECREMENTO,tk_ASIGNAFLECHA;
 
-non terminal INICIO,RECURSIVE,BEGIN,DECLARA,ASIGNA,CONDICION,SWITCH,FOR,WHILE,HASTA,METODO,FUNCION,PRINT;
-non terminal LISTID,TIPO,INSTRUCCIONES,EXPRESION_NUM,EXPRESION_logica,EXPRESION_relacional,EXPRESION_cadena;
-non terminal RECURSIVE_INST,ELSEIF,LISTP,EJECUTAR;
+non terminal Nodo INICIO,I,RECURSIVE,BEGIN,DECLARA,ASIGNA,CONDICION,SWITCH,FOR,WHILE,HASTA,METODO,FUNCION,PRINT;
+non terminal Nodo LISTID,TIPO,INSTRUCCIONES,EXPRESION_NUM,EXPRESION_logica,EXPRESION_relacional,EXPRESION_cadena;
+non terminal Nodo RECURSIVE_INST,ELSEIF,LISTP,EJECUTAR;
 
 precedence left tk_MAS,tk_MENOS,tk_POR,tk_DIVIDIDO,res_MOD,res_POTENCIA ;
 
 start with INICIO;
 
-//INICIO::= res_INICIO RECURSIVE res_FIN;
-INICIO::= HASTA ;
+INICIO::= I:a {: parser.raiz = a; :} //Raiz del AST
 
-RECURSIVE::= BEGIN RECURSIVE
-           | BEGIN
+//INICIO::=  RECURSIVE:a{:parser.raiz = a;:} //Raiz del AST
+;
+// INICIO::= DECLARA ;//TESTS
+
+I::=res_INICIO:a RECURSIVE:b res_FIN:c{: Nodo padre = new Nodo("INICIO", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                         padre.AddHijo(new Nodo("res_Inicio", "", 0,0)); 
+                                         padre.AddHijo(b);
+                                         padre.AddHijo(new Nodo("res_FIN", "", 0,0)); 
+                                         RESULT = padre; :}
 ;
 
-BEGIN::= DECLARA
+RECURSIVE::=  RECURSIVE:a BEGIN:b {: Nodo padre = new Nodo("INSTRUCCIONES", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                     padre.AddHijo(a); 
+                                     padre.AddHijo(b);
+                                     RESULT = padre; :}
+                | BEGIN:a         {: Nodo padre = new Nodo("INSTRUCCIONES", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                  padre.AddHijo(a); 
+                                  RESULT = padre; :}
+;
+
+BEGIN::= DECLARA:a {: RESULT=a; :}
        | ASIGNA
        | CONDICION
        | SWITCH
@@ -74,11 +78,21 @@ BEGIN::= DECLARA
        | HASTA
        | METODO
        | FUNCION
-       | PRINT
+       | PRINT:a {: RESULT=a; :}// retornamos el nodo que viene ya creado de declaracion
        | error
 ;
 
-DECLARA::= res_INGRESAR LISTID res_COMO TIPO res_CONVALOR EXPRESION_NUM tk_PTCOMA //{: objeto.call(a); :}
+DECLARA::= res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_NUM:f tk_PTCOMA:g {:
+                                                                            Nodo padre = new Nodo("DECLARACION", "", 0,0);
+                                                                            padre.AddHijo(new Nodo("res_INGRESAR", a, aright, aleft));               //agregamos como hijo la palabra reservada imprimir
+                                                                            padre.AddHijo(b);                                                        //agregamos como hijo el identificador de la cadena
+                                                                            padre.AddHijo(new Nodo("res_COMO", c, cright, cleft));             //agregamos como hijo el signo ptcoma
+                                                                            padre.AddHijo(d);                                                        //agregamos como hijo el identificador de la cadena
+                                                                            padre.AddHijo(new Nodo("res_CVALOR", e, cright, cleft));             //agregamos como hijo el signo ptcoma
+                                                                            padre.AddHijo(f);                                                        //agregamos como hijo el identificador de la cadena
+                                                                            padre.AddHijo(new Nodo("tk_PTCOMA", g, cright, cleft));             //agregamos como hijo el signo ptcoma
+                                                                            RESULT = padre;                                                                             
+                                                                                    :}
 ;
 
 ASIGNA::= LISTID tk_ASIGNAFLECHA EXPRESION_NUM tk_PTCOMA 
@@ -116,7 +130,7 @@ METODO::= res_METODO IDENTIFICADOR RECURSIVE_INST res_FINMETODO
 
 //--->FUNCION<---//
 FUNCION::= res_FUNCION IDENTIFICADOR TIPO RECURSIVE_INST res_FINFUNCION
-        | res_METODO IDENTIFICADOR res_METODOCONP tk_PARIZQ LISTP tk_PARDER RECURSIVE_INST res_FINFUNCION
+        | res_FUNCION IDENTIFICADOR TIPO res_METODOCONP tk_PARIZQ LISTP tk_PARDER RECURSIVE_INST res_FINFUNCION
 ;
 
 //--->EJECUTAR<---//
@@ -125,36 +139,120 @@ EJECUTAR::= res_EJECUTAR IDENTIFICADOR tk_PARIZQ tk_PARDER tk_PTCOMA
 ;
 
 //--->PRINT<---//
-PRINT::= res_IMPRIMIR  tk_CADENA:a tk_PTCOMA{: print(a); :}
-       | res_IMPRIMIRNL  tk_CADENA:a tk_PTCOMA {: print(a); :}
+PRINT::= res_IMPRIMIR:a  tk_CADENA:b tk_PTCOMA:c {: 
+                                                        Nodo padre = new Nodo("PRINT", "", 0,0);
+                                                        padre.AddHijo(new Nodo("res_PRINT", a, aright, aleft));               //agregamos como hijo la palabra reservada imprimir
+                                                        padre.AddHijo(new Nodo("tk_cadena", b, bright, bleft));     //agregamos como hijo el identificador de la cadena
+                                                        padre.AddHijo(new Nodo("tk_PTCOMA", c, cright, cleft));             //agregamos como hijo el signo ptcoma
+                                                        RESULT = padre;    
+                                                    :}
+       | res_IMPRIMIRNL:a  tk_CADENA:b tk_PTCOMA:c {: 
+                                                        Nodo padre = new Nodo("PRINTLN", "", 0,0);
+                                                        padre.AddHijo(new Nodo("res_PRINTNL", a, aright, aleft));               
+                                                        padre.AddHijo(new Nodo("tk_cadena", b, bright, bleft));     
+                                                        padre.AddHijo(new Nodo("tk_PTCOMA", c, cright, cleft));             
+                                                        RESULT = padre;    
+                                                    :}
 ;
 
-//              ---------[Utilidades]--------           //
-TIPO::= res_CADENA
-      | res_NUMERO
-      | res_BOOLEAN
+//-----------------------------------------------------------------//
+//------------------------[Utilidades]-----------------------------//
+//-----------------------------------------------------------------//
+
+TIPO::= res_CADENA:a {: Nodo padre = new Nodo("TIPO", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                       padre.AddHijo(new Nodo("res_CADENA", "", aright, aleft));
+                        RESULT=padre; :}
+      | res_NUMERO:a {: Nodo padre = new Nodo("TIPO", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                       padre.AddHijo(new Nodo("res_num", "", aright, aleft));
+                        RESULT=padre; :}
+      | res_BOOLEAN:a {: Nodo padre = new Nodo("TIPO", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                       padre.AddHijo(new Nodo("res_bool", a, aright, aleft));
+                        RESULT=padre; :}
 ;
 
-LISTID::= LISTID tk_COMA IDENTIFICADOR
-        | IDENTIFICADOR
+LISTID::= LISTID:a tk_COMA:b IDENTIFICADOR:c {:
+                                     Nodo padre = new Nodo("LISTID", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                     padre.AddHijo(a); 
+                                     padre.AddHijo (new Nodo("tk_PTCOMA", b, 0,0));
+                                     padre.AddHijo (new Nodo("id", c, 0,0));
+                                     RESULT = padre;
+                                        :}
+        | IDENTIFICADOR:a {:
+                                     Nodo padre = new Nodo("LISTID", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                     padre.AddHijo (new Nodo("ID", a, 0,0));
+                                     RESULT = padre;
+                            :}
 ;
 LISTP::= LISTP tk_COMA IDENTIFICADOR TIPO
         | IDENTIFICADOR TIPO
 ;
 
-EXPRESION_NUM ::= EXPRESION_NUM:a tk_MAS EXPRESION_NUM:b// {:objeto.call(a,b); :}
-            | EXPRESION_NUM tk_MENOS EXPRESION_NUM
-            | EXPRESION_NUM tk_POR EXPRESION_NUM
-            | EXPRESION_NUM tk_DIVIDIDO EXPRESION_NUM
-            | EXPRESION_NUM res_POTENCIA EXPRESION_NUM
-            | EXPRESION_NUM res_MOD EXPRESION_NUM
-            | tk_PARIZQ EXPRESION_NUM tk_PARDER 
-            | ENTERO:a //{:RESULT=a; token(RESULT); :}
-            | DECIMAL
-            | IDENTIFICADOR
-            | tk_CADENA
-            | res_VERDADERO
-            | res_FALSO
+EXPRESION_NUM ::= EXPRESION_NUM:a tk_MAS:b EXPRESION_NUM:c {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("mas", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}                              // {:objeto.call(a,b); :}
+            | EXPRESION_NUM:a tk_MENOS:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("menos", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+            | EXPRESION_NUM:a tk_POR:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("por", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+            | EXPRESION_NUM:a tk_DIVIDIDO:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("div", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+            | EXPRESION_NUM:a res_POTENCIA:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("pow", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+            | EXPRESION_NUM:a res_MOD:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("mod", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+            | tk_PARIZQ:a EXPRESION_NUM:b tk_PARDER:c {: Nodo padre = new Nodo("E", "", 0,0); 
+                                                         padre.AddHijo(new Nodo("tk_PABRE", a, aright, aleft));    
+                                                         padre.AddHijo(b);    
+                                                         padre.AddHijo(new Nodo("tk_PCIERRA", c, cright, cleft));    
+                                                         RESULT = padre;                                         
+                                                       :}
+            | ENTERO:a  {: Nodo padre = new Nodo("E", "", 0,0); 
+                        padre.AddHijo(new Nodo("ENTERO", a, aright, aleft));    
+                        RESULT = padre;                                         
+                        :}
+            | DECIMAL:a {: Nodo padre = new Nodo("E", "", 0,0); 
+                        padre.AddHijo(new Nodo("DECIMAL", a, aright, aleft));    
+                        RESULT = padre;                                         
+                        :}  
+            | IDENTIFICADOR:a{: Nodo padre = new Nodo("E", "", 0,0); 
+                        padre.AddHijo(new Nodo("ID", a, aright, aleft));    
+                        RESULT = padre;                                         
+                        :}  
+            | tk_CADENA:a{: Nodo padre = new Nodo("E", "", 0,0); 
+                        padre.AddHijo(new Nodo("tk_cadena", a, aright, aleft));    
+                        RESULT = padre;                                         
+                        :}  
+            | res_VERDADERO:a{: Nodo padre = new Nodo("E", "", 0,0); 
+                        padre.AddHijo(new Nodo("TRUE", a, aright, aleft));    
+                        RESULT = padre;                                         
+                        :}  
+            | res_FALSO:a{: Nodo padre = new Nodo("E", "", 0,0); 
+                        padre.AddHijo(new Nodo("FALSE", a, aright, aleft));    
+                        RESULT = padre;                                         
+                        :}  
 ;
 RECURSIVE_INST::= INSTRUCCIONES RECURSIVE_INST
               | INSTRUCCIONES

@@ -9,6 +9,7 @@ package arbol;
  *
  * @author josue
  */
+
 public class Imprimir {
     
     public Imprimir() {

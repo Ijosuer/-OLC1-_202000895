@@ -94,7 +94,7 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 "fin_funcion"          {return new Symbol(sym.res_FINFUNCION,yyline,yychar, yytext());} 
 
 
-"ejectuar"          {return new Symbol(sym.res_EJECUTAR,yyline,yychar, yytext());} 
+"ejecutar"          {return new Symbol(sym.res_EJECUTAR,yyline,yychar, yytext());} 
 
 
 "imprimir"          {System.out.println("Reconocio RES:IMPRIMIR") ;return new Symbol(sym.res_IMPRIMIR,yyline,yychar, yytext());} 
