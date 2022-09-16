@@ -1,0 +1,62 @@
+inicio
+si _v1_ es_igual _v2_ entonces
+    imprimir_nl "no tiene que imprimir este mensaje";
+    imprimir_nl "no tiene que imprimir este mensaje";
+    si _v1_ es_igual _v2_ entonces
+        imprimir "no tiene que imprimir este mensaje";
+	mientras not (_variable1_ mayor_o_igual 5*5+8/2) hacer
+		imprimir _variable1_;
+		ingresar _variable1_ como boolEana con_valor _operaciones1Basica_ es_igual (_operaciones1Basica_)*(8+5);
+		_variable1_ -> _variable1_ + 1;
+		_variable13_ -> _variable1_ + 1;
+    		si _v1_ es_igual _v2_ entonces
+    			imprimir_nl "no tiene que imprimir este mensaje";
+			segun _varaux_ hacer
+			¿0? entonces
+				_curso1_ , _curso2_ ,_curso3_  -> "Organizacion de lenguajes y compiladores 1";
+				imprimir_nl "el valor es mayor a 0 y menos a 2";
+			¿2? entonces
+				para _i_->0 hasta _exponente_-1 hacer
+					_acumulado_ -> _acumulado_ + _acumulado_;
+				fin_para
+
+				para _i_->0 hasta _exponente_-1 con incremental 2 hacer
+					_acumulado_ -> _acumulado_ + _acumulado_;
+					imprimir "salto";
+				fin_para	
+				imprimir_nl "el valor es mayor a 2";
+			fin_segun
+		de_lo_contrario
+        		imprimir_nl "este print es un ejemplo";
+		fin_si
+	fin_mientras
+    fin_si
+o_si _v1_ es_igual 13 entonces
+    imprimir_nl "no tiene que imprimir este mensaje";
+    imprimir_nl "mensaje de prueba";
+    si _v1_ es_igual _v2_ entonces
+        imprimir_nl "no tiene que imprimir este mensaje";
+    de_lo_contrario
+        imprimir_nl "este print es un ejemplo";
+    fin_si
+o_si _v1_ es_igual 14 entonces
+    imprimir_nl "no tiene que imprimir este mensaje";
+    imprimir_nl "mensaje de prueba";
+    si _v1_ es_igual _v2_ entonces
+        imprimir_nl "no tiene que imprimir este mensaje";
+    o_si _v1_ es_igual 14 entonces
+        imprimir_nl "no tiene que imprimir este mensaje";
+        imprimir_nl "mensaje de prueba";
+    de_lo_contrario
+        imprimir_nl "este print es un ejemplo";
+    fin_si
+de_lo_contrario
+		ingresar _variable1_ como boolEana con_valor _operaciones1Basica_ es_igual (_operaciones1Basica_)*(8+5);
+		_variable1_ -> _variable1_ + 1;
+		_variable13_ -> _variable1_ + 1;
+    		si _v1_ es_igual _v2_ entonces
+    			imprimir_nl "no tiene que imprimir este mensaje";
+			fin_si
+        imprimir_nl "este print es un ejemplo";
+fin_si
+fin

@@ -2,7 +2,9 @@ package analizadores;
 import java_cup.runtime.*;
 
 %%
-
+%{
+    //----> Codigo de usuario en sintaxis java
+%}
 //directrices
 
 %public 
@@ -21,8 +23,8 @@ import java_cup.runtime.*;
     yychar = 1; 
 %init} 
 
-
-CARACTER   =   [\']([^\t\'\"\n]|(\\\")|(\\n)|(\\\')|(\\t))?[\']  
+ASKC = [\¿]
+CARACTER   =   [\']([^\t\'\"\n]|((\$)(\{([0-9])+\}))|(\\\")|(\\n)|(\\\')|(\\t))?[\']
 BLANCOS=[ \r\t]+
 CADENA = [\"]([^\"]|(\\\"))*[\"]
 
@@ -49,7 +51,7 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 "numero"            {System.out.println("Reconocio RES:NUMERO lexema:"+yytext());return new Symbol(sym.res_NUMERO,yyline,yychar, yytext());} 
 "caracter"          {System.out.println("Reconocio RES:CARACTER lexema:"+yytext());return new Symbol(sym.res_CARACTER,yyline,yychar,yytext());} 
 "cadena"          {System.out.println("Reconocio RES:CADENA lexema:"+yytext());return new Symbol(sym.res_CADENA,yyline,yychar,yytext());} 
-"boolean"          {System.out.println("Reconocio RES:BOOLEAN lexema:"+yytext());return new Symbol(sym.res_BOOLEAN,yyline,yychar,yytext());} 
+"booleana"          {System.out.println("Reconocio RES:BOOLEAN lexema:"+yytext());return new Symbol(sym.res_BOOLEAN,yyline,yychar,yytext());} 
 "verdadero"          {System.out.println("Reconocio RES:BOOLEAN lexema:"+yytext());return new Symbol(sym.res_VERDADERO,yyline,yychar,yytext());} 
 "falso"          {System.out.println("Reconocio RES:BOOLEAN lexema:"+yytext());return new Symbol(sym.res_FALSO,yyline,yychar,yytext());} 
 "potencia"          {System.out.println("Reconocio RES:POTENCIA");return new Symbol(sym.res_POTENCIA,yyline,yychar,yytext());} 
@@ -73,9 +75,9 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 
 
 "para"          {System.out.println("Reconocio RES:PARA");return new Symbol(sym.res_PARA,yyline,yychar, yytext());} 
-"hasta"          {return new Symbol(sym.res_HASTA,yyline,yychar, yytext());} 
-"con_incremental"          {return new Symbol(sym.res_CONINCREM,yyline,yychar, yytext());} 
-"fin_para"          {return new Symbol(sym.res_FINPARA,yyline,yychar, yytext());} 
+"hasta"          {System.out.println("Reconocio RES:hasta");return new Symbol(sym.res_HASTA,yyline,yychar, yytext());} 
+"con_incremental"          {System.out.println("Reconocio RES:conINCRE");return new Symbol(sym.res_CONINCREM,yyline,yychar, yytext());} 
+"fin_para"          {System.out.println("Reconocio RES:FINPARA");return new Symbol(sym.res_FINPARA,yyline,yychar, yytext());} 
 "mientras"          {System.out.println("Reconocio RES:WHILE"); return new Symbol(sym.res_MIENTRAS,yyline,yychar, yytext());} 
 "fin_mientras"          {return new Symbol(sym.res_FINMIENTRAS,yyline,yychar, yytext());} 
 "repetir"          {System.out.println("Reconocio RES:REPETIR") ;return new Symbol(sym.res_REPETIR,yyline,yychar, yytext());} 
@@ -94,7 +96,7 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 "fin_funcion"          {return new Symbol(sym.res_FINFUNCION,yyline,yychar, yytext());} 
 
 
-"ejecutar"          {return new Symbol(sym.res_EJECUTAR,yyline,yychar, yytext());} 
+"ejecutar"          {System.out.println("Reconocio RES:ejecutar");return new Symbol(sym.res_EJECUTAR,yyline,yychar, yytext());} 
 
 
 "imprimir"          {System.out.println("Reconocio RES:IMPRIMIR") ;return new Symbol(sym.res_IMPRIMIR,yyline,yychar, yytext());} 
@@ -115,10 +117,12 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 "-" {System.out.println("Reconocio token:<tk_MENOS>lexema:"+yytext());return new Symbol(sym.tk_MENOS,yyline,yychar, yytext());}  
 "*" {System.out.println("Reconocio token:<tk_POR>lexema:"+yytext());return new Symbol(sym.tk_POR,yyline,yychar, yytext());} 
 "/" {System.out.println("Reconocio token:<tk_DIVIDIR>lexema:"+yytext());return new Symbol(sym.tk_DIVIDIDO,yyline,yychar, yytext());} 
-"&" {return new Symbol(sym.tk_CONCAT,yyline,yychar, yytext());} 
-"<" {System.out.println("Reconocio token:<tk_MENQ>lexema:"+yytext());return new Symbol(sym.tk_MENQUE,yyline,yychar, yytext());} 
-">" {System.out.println("Reconocio token:<tk_MAYQ>lexema:"+yytext());return new Symbol(sym.tk_MAYQUE,yyline,yychar, yytext());} 
 "=" {System.out.println("Reconocio token:<tk_IGUAL>lexema:"+yytext());return new Symbol(sym.tk_IGUAL,yyline,yychar, yytext());} 
+{ASKC} {System.out.println("Reconocio token:<tk_ASKA>lexema:"+yytext());return new Symbol(sym.tk_ASKA,yyline,yychar, yytext());} 
+"?" {System.out.println("Reconocio token:<tk_ASKC>lexema:"+yytext());return new Symbol(sym.tk_ASKC,yyline,yychar, yytext());} 
+"[" {System.out.println("Reconocio token:<tk_CORCHIZQ>lexema:"+yytext());return new Symbol(sym.tk_CORCHIZQ,yyline,yychar, yytext());} 
+"]" {System.out.println("Reconocio token:<tk_CORCHDER>lexema:"+yytext());return new Symbol(sym.tk_CORCHDER,yyline,yychar, yytext());} 
+
 
 "++" {System.out.println("Reconocio token:<tk_MASMAS>lexema:"+yytext());return new Symbol(sym.tk_INCREMENTO,yyline,yychar, yytext());} 
 "--" {System.out.println("Reconocio token:<tk_MENOSMENOS>lexema:"+yytext());return new Symbol(sym.tk_DECREMENTO,yyline,yychar, yytext());} 

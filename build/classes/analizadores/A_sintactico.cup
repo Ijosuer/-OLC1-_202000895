@@ -5,12 +5,15 @@ import java_cup.runtime.Symbol;
 import arbol.Imprimir;
 import java.util.LinkedList;
 import arbol.Nodo;
+import arbol.Imprimir;
 
 parser code 
 {:
         public static Nodo raiz;
+        public static Imprimir imprimir = new Imprimir();
         
-        public Nodo getRaiz(){
+        
+        public Nodo getRaiz(){      
             return raiz;
         }
         
@@ -35,13 +38,13 @@ terminal String res_FINFUNCION,res_IMPRIMIRNL,res_FINMIENTRAS,res_FUNCION,res_CO
 terminal String res_ELSE,res_METODOCONP,res_CADENA,res_BOOLEAN,res_POTENCIA,res_MOD;
 terminal String res_MAYOR,res_MENOR,res_MENORIGUAL,res_MAYORIGUAL,res_ESIGUAL,res_ESDIFERENTE,res_OR,res_AND,res_NOT;
 
-terminal String tk_MAS,tk_DIVIDIDO,tk_POR,tk_PTCOMA,tk_COMA,tk_LLAVIZQ,tk_LLAVDER ;
-terminal String tk_PARIZQ, tk_PARDER, tk_MENOS, tk_CONCAT,tk_MENQUE,tk_MAYQUE, tk_IGUAL;
-terminal String tk_CADENA,tk_INCREMENTO,tk_DECREMENTO,tk_ASIGNAFLECHA;
+terminal String tk_MAS,tk_DIVIDIDO,tk_POR,tk_PTCOMA,tk_COMA,tk_LLAVIZQ,tk_LLAVDER ,tk_CORCHIZQ,tk_CORCHDER;
+terminal String tk_PARIZQ, tk_PARDER, tk_MENOS, tk_IGUAL;
+terminal String tk_CADENA,tk_INCREMENTO,tk_DECREMENTO,tk_ASIGNAFLECHA, tk_ASKC,tk_ASKA;
 
-non terminal Nodo INICIO,I,RECURSIVE,BEGIN,DECLARA,ASIGNA,CONDICION,SWITCH,FOR,WHILE,HASTA,METODO,FUNCION,PRINT;
-non terminal Nodo LISTID,TIPO,INSTRUCCIONES,EXPRESION_NUM,EXPRESION_logica,EXPRESION_relacional,EXPRESION_cadena;
-non terminal Nodo RECURSIVE_INST,ELSEIF,LISTP,EJECUTAR;
+non terminal Nodo INICIO,I,RECURSIVE,BEGIN,DECLARA,ASIGNA,CONDICION,FOR,WHILE,HASTA,METODO,FUNCION,PRINT,PRINT_;
+non terminal Nodo LISTID,TIPO,INSTRUCCIONES,EXPRESION_NUM,EXPRESION_logica,SWITCH,SWITCH_;
+non terminal Nodo RECURSIVE_INST,ELSEIF,LISTP,LISTP_,EJECUTAR,RETORNAR;
 
 precedence left tk_MAS,tk_MENOS,tk_POR,tk_DIVIDIDO,res_MOD,res_POTENCIA ;
 
@@ -51,13 +54,13 @@ INICIO::= I:a {: parser.raiz = a; :} //Raiz del AST
 
 //INICIO::=  RECURSIVE:a{:parser.raiz = a;:} //Raiz del AST
 ;
-// INICIO::= DECLARA ;//TESTS
+ //INICIO::= BORRAR;//TESTS
 
 I::=res_INICIO:a RECURSIVE:b res_FIN:c{: Nodo padre = new Nodo("INICIO", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
-                                         padre.AddHijo(new Nodo("res_Inicio", "", 0,0)); 
+                                        padre.AddHijo(new Nodo("res_Inicio", "", 0,0)); 
                                          padre.AddHijo(b);
                                          padre.AddHijo(new Nodo("res_FIN", "", 0,0)); 
-                                         RESULT = padre; :}
+                                        RESULT = padre; :}
 ;
 
 RECURSIVE::=  RECURSIVE:a BEGIN:b {: Nodo padre = new Nodo("INSTRUCCIONES", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
@@ -67,19 +70,19 @@ RECURSIVE::=  RECURSIVE:a BEGIN:b {: Nodo padre = new Nodo("INSTRUCCIONES", "", 
                 | BEGIN:a         {: Nodo padre = new Nodo("INSTRUCCIONES", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
                                   padre.AddHijo(a); 
                                   RESULT = padre; :}
+                | error tk_PTCOMA:a  {: Nodo padre = new Nodo("", "", 0,0);:}
 ;
 
 BEGIN::= DECLARA:a {: RESULT=a; :}
-       | ASIGNA
-       | CONDICION
-       | SWITCH
-       | FOR
-       | WHILE
-       | HASTA
-       | METODO
-       | FUNCION
+       | ASIGNA:a {: RESULT=a; :}
+       | CONDICION:a {: RESULT=a; :}
+       | SWITCH:a {: RESULT=a; :}
+       | FOR:a {: RESULT=a; :}
+       | WHILE:a {: RESULT=a; :}
+       | HASTA:a {: RESULT=a; :}                        
+       | METODO:a {: RESULT=a; :}
+       | FUNCION:a {: RESULT=a; :}
        | PRINT:a {: RESULT=a; :}// retornamos el nodo que viene ya creado de declaracion
-       | error
 ;
 
 DECLARA::= res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_NUM:f tk_PTCOMA:g {:
@@ -88,73 +91,333 @@ DECLARA::= res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_NU
                                                                             padre.AddHijo(b);                                                        //agregamos como hijo el identificador de la cadena
                                                                             padre.AddHijo(new Nodo("res_COMO", c, cright, cleft));             //agregamos como hijo el signo ptcoma
                                                                             padre.AddHijo(d);                                                        //agregamos como hijo el identificador de la cadena
-                                                                            padre.AddHijo(new Nodo("res_CVALOR", e, cright, cleft));             //agregamos como hijo el signo ptcoma
+                                                                            padre.AddHijo(new Nodo("res_CVALOR", e, eright, eleft));             //agregamos como hijo el signo ptcoma
                                                                             padre.AddHijo(f);                                                        //agregamos como hijo el identificador de la cadena
-                                                                            padre.AddHijo(new Nodo("tk_PTCOMA", g, cright, cleft));             //agregamos como hijo el signo ptcoma
+                                                                            padre.AddHijo(new Nodo("tk_PTCOMA", ";", 0, 0));             //agregamos como hijo el signo ptcoma
+                                                                            RESULT = padre;                                                                             
+                                                                                    :}
+        | res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_logica:f tk_PTCOMA:g {:
+                                                                            Nodo padre = new Nodo("DECLARACION", "", 0,0);
+                                                                            padre.AddHijo(new Nodo("res_INGRESAR", a, aright, aleft));             
+                                                                            padre.AddHijo(b);                                                       
+                                                                            padre.AddHijo(new Nodo("res_COMO", c, cright, cleft));             
+                                                                            padre.AddHijo(d);             
+                                                                            padre.AddHijo(new Nodo("res_CVALOR", e, eright, eleft));             
+                                                                            padre.AddHijo(f);                                                 
+                                                                            padre.AddHijo(new Nodo("tk_PTCOMA", ";", 0, 0));             
                                                                             RESULT = padre;                                                                             
                                                                                     :}
 ;
 
-ASIGNA::= LISTID tk_ASIGNAFLECHA EXPRESION_NUM tk_PTCOMA 
+ASIGNA::= LISTID:a tk_ASIGNAFLECHA:b EXPRESION_NUM:c tk_PTCOMA:d {: Nodo padre = new Nodo("ASIGNA", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                    padre.AddHijo(a); 
+                                                                    padre.AddHijo(new Nodo("tk_FLECHA", b, bright, bleft)); 
+                                                                    padre.AddHijo(c); 
+                                                                    padre.AddHijo(new Nodo("tk_PTCOMA", d, dright, dleft)); 
+                                                                    RESULT = padre; :}
 ;
 
-//---->CONDICIONES<----//
-CONDICION::= res_SI EXPRESION_logica res_ENTONCES RECURSIVE_INST res_FINSI
-           | res_SI EXPRESION_logica res_ENTONCES RECURSIVE_INST res_ELSE RECURSIVE_INST res_FINSI
-           | res_SI EXPRESION_logica res_ENTONCES RECURSIVE_INST ELSEIF res_FINSI
-           | res_SI EXPRESION_logica res_ENTONCES RECURSIVE_INST ELSEIF res_ELSE RECURSIVE_INST res_FINSI
+//---->CONDICIONES<----
+CONDICION::= res_SI:a EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d res_FINSI:e {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                                    padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(new Nodo("res_FINSI", e, eright, eleft)); 
+                                                                                    RESULT = padre; :}
+           | res_SI:a EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d ELSEIF:e res_FINSI:f {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                                    padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(e); 
+                                                                                    padre.AddHijo(new Nodo("res_FINSI", f, fright, fleft)); 
+                                                                                    RESULT = padre; :}
+           | res_SI:a EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d res_ELSE:e RECURSIVE_INST:f res_FINSI:g {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                                    padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(new Nodo("res_ELSE", e, eright, eleft)); 
+                                                                                    padre.AddHijo(f); 
+                                                                                    padre.AddHijo(new Nodo("res_FINSI", g, gright, gleft)); 
+                                                                                    RESULT = padre; :}
+           | res_SI:a EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d ELSEIF:e res_ELSE:f RECURSIVE_INST:g res_FINSI:h {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                                    padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(e); 
+                                                                                    padre.AddHijo(new Nodo("res_ELSE", f, fright, fleft)); 
+                                                                                    padre.AddHijo(g); 
+                                                                                    padre.AddHijo(new Nodo("res_FINSI", h, hright, hleft)); 
+                                                                                    RESULT = padre; :}
+           | res_SI:a IDENTIFICADOR:b res_ENTONCES:c RECURSIVE_INST:d res_FINSI:e {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                                    padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
+                                                                                    padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(new Nodo("res_FINSI", e, eright, eleft)); 
+                                                                                    RESULT = padre; :}
+           | res_SI:a IDENTIFICADOR:b res_ENTONCES:c RECURSIVE_INST:d ELSEIF:e res_FINSI:f {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                                    padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
+                                                                                    padre.AddHijo(new Nodo("ID", b, bright, bleft));
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(e); 
+                                                                                    padre.AddHijo(new Nodo("res_FINSI", f, fright, fleft)); 
+                                                                                    RESULT = padre; :}
+           | res_SI:a IDENTIFICADOR:b res_ENTONCES:c RECURSIVE_INST:d res_ELSE:e RECURSIVE_INST:f res_FINSI:g {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                                    padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
+                                                                                    padre.AddHijo(new Nodo("ID", b, bright, bleft));
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(new Nodo("res_ELSE", e, eright, eleft)); 
+                                                                                    padre.AddHijo(f); 
+                                                                                    padre.AddHijo(new Nodo("res_FINSI", g, gright, gleft)); 
+                                                                                    RESULT = padre; :}
+           | res_SI:a IDENTIFICADOR:b res_ENTONCES:c RECURSIVE_INST:d ELSEIF:e res_ELSE:f RECURSIVE_INST:g res_FINSI:h {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                                                    padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
+                                                                                    padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(e); 
+                                                                                    padre.AddHijo(new Nodo("res_ELSE", f, fright, fleft)); 
+                                                                                    padre.AddHijo(g); 
+                                                                                    padre.AddHijo(new Nodo("res_FINSI", h, hright, hleft)); 
+                                                                                    RESULT = padre; :}
 
 ;
-ELSEIF::= ELSEIF res_ELSEIF  EXPRESION_logica res_ENTONCES RECURSIVE_INST
-        | res_ELSEIF  EXPRESION_logica res_ENTONCES RECURSIVE_INST
+ELSEIF::= ELSEIF:a res_ELSEIF:b EXPRESION_logica:c res_ENTONCES:d RECURSIVE_INST:e {: Nodo padre = new Nodo("ELIF", "", 0,0);
+                                                                                    padre.AddHijo(a); 
+                                                                                    padre.AddHijo(new Nodo("res_ELIF", b, bright, bleft)); 
+                                                                                    padre.AddHijo(c); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", d, dright, dleft)); 
+                                                                                    padre.AddHijo(e);
+                                                                                    RESULT = padre;  :}
+        | res_ELSEIF:a  EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d {:   Nodo padre = new Nodo("ELIF", "", 0,0);
+                                                                                    padre.AddHijo(new Nodo("res_ELIF", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d);RESULT = padre;  :}
+        | res_ELSEIF:a  IDENTIFICADOR:b res_ENTONCES:c RECURSIVE_INST:d {:   Nodo padre = new Nodo("ELIF", "", 0,0);
+                                                                                    padre.AddHijo(new Nodo("res_ELIF", a, aright, aleft)); 
+                                                                                    padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d);RESULT = padre;  :}
+        | ELSEIF:a res_ELSEIF:b  IDENTIFICADOR:c res_ENTONCES:d RECURSIVE_INST:e {: Nodo padre = new Nodo("ELIF", "", 0,0);
+                                                                                    padre.AddHijo(a); 
+                                                                                    padre.AddHijo(new Nodo("res_ELIF", b, bright, bleft)); 
+                                                                                    padre.AddHijo(new Nodo("ID", c, cright, cleft)); 
+                                                                                    padre.AddHijo(new Nodo("res_THEN", d, dright, dleft)); 
+                                                                                    padre.AddHijo(e);RESULT = padre;  :}
 
 ;
 
 //---->CICLOS<----//
 
-FOR::= res_PARA LISTID tk_ASIGNAFLECHA EXPRESION_NUM res_HASTA EXPRESION_NUM res_HACER RECURSIVE_INST res_FINPARA
-     //***PENDIENTE | res_PARA ASIGNA res_HASTA EXPRESION_NUM res_CONVALOR* RECURSIVE_INST res_FINPARA
+FOR::= res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESION_NUM:f res_HACER:g RECURSIVE_INST:h res_FINPARA:i {: Nodo padre = new Nodo("FOR", "", 0,0);
+                                                                                    padre.AddHijo(new Nodo("res_PARA", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("tk_FLECHA", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(new Nodo("res_HASTA", e, eright, eleft)); 
+                                                                                    padre.AddHijo(f); 
+                                                                                    padre.AddHijo(new Nodo("res_HACER", g, gright, gleft)); 
+                                                                                    padre.AddHijo(h); 
+                                                                                    padre.AddHijo(new Nodo("res_FINPARA", i, iright, ileft)); 
+                                                                                    RESULT = padre;  :}
+     | res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESION_NUM:f res_CONINCREM:g EXPRESION_NUM:h res_HACER:i RECURSIVE_INST:j res_FINPARA:z {: Nodo padre = new Nodo("FOR", "", 0,0);
+                                                                                    padre.AddHijo(new Nodo("res_PARA", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("tk_FLECHA", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(new Nodo("res_HASTA", e, eright, eleft)); 
+                                                                                    padre.AddHijo(f); 
+                                                                                    padre.AddHijo(new Nodo("res_CONINCREM", g, gright, gleft)); 
+                                                                                    padre.AddHijo(h); 
+                                                                                    padre.AddHijo(new Nodo("res_HACER", i, iright, ileft)); 
+                                                                                    padre.AddHijo(j); 
+                                                                                    padre.AddHijo(new Nodo("res_PARAFION", z, zright, zleft)); 
+                                                                                    RESULT = padre;  :}
 ;
 //ESTA PENDIENTE WHUILEEEEEEE******
-WHILE::= res_MIENTRAS EXPRESION_logica res_HACER RECURSIVE_INST res_FINMIENTRAS
+WHILE::= res_MIENTRAS:a EXPRESION_logica:b res_HACER:c RECURSIVE_INST:d res_FINMIENTRAS:e {: Nodo padre = new Nodo("WHILE", "", 0,0);
+                                                                                    padre.AddHijo(new Nodo("res_WHILE", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("res_HACER", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(new Nodo("res_FINWHILE", e, eright, eleft)); 
+                                                                                    RESULT = padre;  :}
+       | res_MIENTRAS:a EXPRESION_logica:b res_HACER:c res_FINMIENTRAS:d{: Nodo padre = new Nodo("WHILE", "", 0,0);
+                                                                                    padre.AddHijo(new Nodo("res_WHILE", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("res_HACER", c, cright, cleft)); 
+                                                                                    padre.AddHijo(new Nodo("res_FINWHILE", d, dright, dleft)); 
+                                                                                    RESULT = padre;  :}
 ;
-HASTA::= res_REPETIR  RECURSIVE_INST res_HASTAQ EXPRESION_logica
+HASTA::= res_REPETIR:a  RECURSIVE_INST:b res_HASTAQ:c EXPRESION_logica:d {: Nodo padre = new Nodo("REPETIR", "", 0,0);
+                                                                        padre.AddHijo(new Nodo("res_REPETIR", a, aright, aleft)); 
+                                                                        padre.AddHijo(b); 
+                                                                        padre.AddHijo(new Nodo("res_HASTA", c, cright, cleft)); 
+                                                                        padre.AddHijo(d); 
+                                                                        RESULT = padre;  :}
+       | res_REPETIR:a   res_HASTAQ:b EXPRESION_logica:c {: Nodo padre = new Nodo("REPETIR", "", 0,0);
+                                                            padre.AddHijo(new Nodo("res_REPETIR", a, aright, aleft)); 
+                                                            padre.AddHijo(new Nodo("res_HASTA", b, bright, bleft)); 
+                                                            padre.AddHijo(c);
+                                                            RESULT = padre;  :}
 ;
 
 //---------Switch queda pendiente xd
+SWITCH::= res_SEGUN:a EXPRESION_NUM:b res_HACER:c SWITCH_:d res_FINSEGUN:e {: Nodo padre = new Nodo("SWITCH", "", 0,0);
+                                                                            padre.AddHijo(new Nodo("res_SEGUN", a, aright, aleft)); 
+                                                                            padre.AddHijo(b);
+                                                                            padre.AddHijo(new Nodo("res_DO", c, cright, cleft)); 
+                                                                            padre.AddHijo(d);
+                                                                            padre.AddHijo(new Nodo("res_FINSEGUN", e, eright, eleft)); 
+                                                                            RESULT = padre;  :}
+        | res_SEGUN:a EXPRESION_NUM:b res_HACER:c SWITCH_:d res_ELSE:e res_ENTONCES:f RECURSIVE_INST:g res_FINSEGUN:h {: Nodo padre = new Nodo("SWITCH", "", 0,0);
+                                                                                                    padre.AddHijo(new Nodo("res_SEGUN", a, aright, aleft)); 
+                                                                                                    padre.AddHijo(b);
+                                                                                                    padre.AddHijo(new Nodo("res_DO", c, cright, cleft)); 
+                                                                                                    padre.AddHijo(d);
+                                                                                                    padre.AddHijo(new Nodo("res_ELSE", e, eright, eleft)); 
+                                                                                                    padre.AddHijo(new Nodo("res_THEN", f, fright, fleft)); 
+                                                                                                    padre.AddHijo(g);
+                                                                                                    padre.AddHijo(new Nodo("res_FINSEGUN", h, hright, hleft)); 
+                                                                                                    RESULT = padre;  :}
+;
+SWITCH_::= SWITCH_:a tk_ASKA:b EXPRESION_NUM:c tk_ASKC:d res_ENTONCES:e RECURSIVE_INST:f  {: Nodo padre = new Nodo("SWITCH_", "", 0,0);
+                                                                                padre.AddHijo(a);
+                                                                                padre.AddHijo(new Nodo("tk_ASKA", b, bright, bleft)); 
+                                                                                padre.AddHijo(c);
+                                                                                padre.AddHijo(new Nodo("tk_ASKC", d, dright, dleft)); 
+                                                                                padre.AddHijo(new Nodo("res_THEN", e, eright, eleft)); 
+                                                                                padre.AddHijo(f);
+                                                                                RESULT = padre;  :}
+         | tk_ASKA:a EXPRESION_NUM:b tk_ASKC:c res_ENTONCES:d RECURSIVE_INST:e {: Nodo padre = new Nodo("SWITCH_", "", 0,0);
+                                                                                padre.AddHijo(new Nodo("tk_ASKA", a, aright, aleft)); 
+                                                                                padre.AddHijo(b);
+                                                                                padre.AddHijo(new Nodo("tk_ASKC", c, cright, cleft)); 
+                                                                                padre.AddHijo(new Nodo("res_THEN", d, dright, dleft)); 
+                                                                                padre.AddHijo(e);
+                                                                                RESULT = padre;  :}
+;
 
 //--->METODOS<---//
-METODO::= res_METODO IDENTIFICADOR RECURSIVE_INST res_FINMETODO
-        | res_METODO IDENTIFICADOR res_METODOCONP tk_PARIZQ LISTP tk_PARDER RECURSIVE_INST res_FINMETODO
+METODO::= res_METODO:a IDENTIFICADOR:b RECURSIVE_INST:c res_FINMETODO:d {: Nodo padre = new Nodo("METODO", "", 0,0);
+                                                                                padre.AddHijo(new Nodo("res_METODO", a, aright, aleft)); 
+                                                                                padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                padre.AddHijo(c);
+                                                                                padre.AddHijo(new Nodo("res_FINMETODO", d, dright, dleft)); 
+                                                                                RESULT = padre;  :}
+        | res_METODO:a IDENTIFICADOR:b res_METODOCONP:c tk_PARIZQ:d LISTP:e tk_PARDER:f RECURSIVE_INST:g res_FINMETODO:h {: Nodo padre = new Nodo("METODO", "", 0,0);
+                                                                                padre.AddHijo(new Nodo("res_METODO", a, aright, aleft)); 
+                                                                                padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                padre.AddHijo(new Nodo("res_METODOCONP", c,cright, cleft)); 
+                                                                                padre.AddHijo(new Nodo("tk_PARIZQ", d, dright, dleft)); 
+                                                                                padre.AddHijo(e);
+                                                                                padre.AddHijo(new Nodo("tk_PARDER", f, fright, fleft)); 
+                                                                                padre.AddHijo(g);
+                                                                                padre.AddHijo(new Nodo("res_FINMETODO", h, hright, hleft)); 
+                                                                                RESULT = padre;  :}
 ;
 
 //--->FUNCION<---//
-FUNCION::= res_FUNCION IDENTIFICADOR TIPO RECURSIVE_INST res_FINFUNCION
-        | res_FUNCION IDENTIFICADOR TIPO res_METODOCONP tk_PARIZQ LISTP tk_PARDER RECURSIVE_INST res_FINFUNCION
+FUNCION::= res_FUNCION:a IDENTIFICADOR:b TIPO:c RECURSIVE_INST:d RETORNAR:f res_FINFUNCION:e {: Nodo padre = new Nodo("FUNCION", "", 0,0);
+                                                                                padre.AddHijo(new Nodo("res_FUNCION", a, aright, aleft)); 
+                                                                                padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                padre.AddHijo(c);
+                                                                                padre.AddHijo(d);
+                                                                                padre.AddHijo(f);
+                                                                                padre.AddHijo(new Nodo("res_FINFUNCION", e, eright, eleft)); 
+                                                                                RESULT = padre;  :}
+        | res_FUNCION:a IDENTIFICADOR:b TIPO:c res_METODOCONP:d tk_PARIZQ:e LISTP:f tk_PARDER:g RECURSIVE_INST:h RETORNAR:j res_FINFUNCION:i {: Nodo padre = new Nodo("FUNCION", "", 0,0);
+                                                                                padre.AddHijo(new Nodo("res_METODO", a, aright, aleft)); 
+                                                                                padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                padre.AddHijo(c);
+                                                                                padre.AddHijo(new Nodo("res_METODOCONP", d, dright, dleft)); 
+                                                                                padre.AddHijo(new Nodo("tk_PARIZQ", e, eright, eleft)); 
+                                                                                padre.AddHijo(f);
+                                                                                padre.AddHijo(new Nodo("tk_PARDER", g, gright, gleft)); 
+                                                                                padre.AddHijo(h);
+                                                                                padre.AddHijo(j);
+                                                                                padre.AddHijo(new Nodo("res_FINFUNCION", i, iright, ileft)); 
+                                                                                RESULT = padre;  :}
 ;
 
 //--->EJECUTAR<---//
-EJECUTAR::= res_EJECUTAR IDENTIFICADOR tk_PARIZQ tk_PARDER tk_PTCOMA
-          | res_EJECUTAR IDENTIFICADOR tk_PARIZQ LISTP tk_PARDER tk_PTCOMA
+EJECUTAR::= res_EJECUTAR:a IDENTIFICADOR:b tk_PARIZQ:c tk_PARDER:d tk_PTCOMA:e {: Nodo padre = new Nodo("EJECUTAR", "", 0,0);
+                                                                                padre.AddHijo(new Nodo("res_EJECUTAR", a, aright, aleft)); 
+                                                                                padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                padre.AddHijo(new Nodo("tk_PARIZQ", c, cright, cleft)); 
+                                                                                padre.AddHijo(new Nodo("tk_PARDER", d, dright, dleft)); 
+                                                                                padre.AddHijo(new Nodo("tk_PTCOMA", e, eright, eleft)); 
+                                                                                RESULT = padre;  :}
+          | res_EJECUTAR:a IDENTIFICADOR:b tk_PARIZQ:c LISTP_:d tk_PARDER:e tk_PTCOMA:f {: Nodo padre = new Nodo("EJECUTAR", "", 0,0);
+                                                                                padre.AddHijo(new Nodo("res_EJECUTAR", a, aright, aleft)); 
+                                                                                padre.AddHijo(new Nodo("ID", b, bright, bleft)); 
+                                                                                padre.AddHijo(new Nodo("tk_PARIZQ", c, cright, cleft)); 
+                                                                                padre.AddHijo(d);
+                                                                                padre.AddHijo(new Nodo("tk_PARDER", e, eright, eleft)); 
+                                                                                padre.AddHijo(new Nodo("tk_PTCOMA", f, fright, fleft)); 
+                                                                                RESULT = padre;  :}
 ;
+RETORNAR::= res_RETORNAR:a EXPRESION_NUM:b tk_PTCOMA:c {: 
+                                                Nodo padre = new Nodo("RETURN", "", 0,0);
+                                                padre.AddHijo(new Nodo("res_RETORNAR", a, aright, aleft));              
+                                                padre.AddHijo(b);     
+                                                padre.AddHijo(new Nodo("tk_PTCOMA", c, cright, cleft));           
+                                                RESULT = padre;    
+                                                :}
+          | res_RETORNAR:a EXPRESION_logica:b tk_PTCOMA:c {: 
+                                                Nodo padre = new Nodo("RETURN", "", 0,0);
+                                                padre.AddHijo(new Nodo("res_RETORNAR", a, aright, aleft));              
+                                                padre.AddHijo(b);     
+                                                padre.AddHijo(new Nodo("tk_PTCOMA", c, cright, cleft));           
+                                                RESULT = padre;    
+                                                :}
 
+;
 //--->PRINT<---//
-PRINT::= res_IMPRIMIR:a  tk_CADENA:b tk_PTCOMA:c {: 
-                                                        Nodo padre = new Nodo("PRINT", "", 0,0);
-                                                        padre.AddHijo(new Nodo("res_PRINT", a, aright, aleft));               //agregamos como hijo la palabra reservada imprimir
-                                                        padre.AddHijo(new Nodo("tk_cadena", b, bright, bleft));     //agregamos como hijo el identificador de la cadena
-                                                        padre.AddHijo(new Nodo("tk_PTCOMA", c, cright, cleft));             //agregamos como hijo el signo ptcoma
-                                                        RESULT = padre;    
-                                                    :}
-       | res_IMPRIMIRNL:a  tk_CADENA:b tk_PTCOMA:c {: 
+PRINT::= res_IMPRIMIR:a  PRINT_:b tk_PTCOMA:c {: 
+                                                Nodo padre = new Nodo("PRINT", "", 0,0);
+                                                padre.AddHijo(new Nodo("res_PRINT", a, aright, aleft));               //agregamos como hijo la palabra reservada imprimir
+                                                padre.AddHijo(b);     //agregamos como hijo el identificador de la cadena
+                                                padre.AddHijo(new Nodo("tk_PTCOMA", c, cright, cleft));             //agregamos como hijo el signo ptcoma
+                                                RESULT = padre;    
+                                                :}
+       | res_IMPRIMIRNL:a  PRINT_:b tk_PTCOMA:c {: 
                                                         Nodo padre = new Nodo("PRINTLN", "", 0,0);
                                                         padre.AddHijo(new Nodo("res_PRINTNL", a, aright, aleft));               
-                                                        padre.AddHijo(new Nodo("tk_cadena", b, bright, bleft));     
+                                                        padre.AddHijo(b);     
                                                         padre.AddHijo(new Nodo("tk_PTCOMA", c, cright, cleft));             
                                                         RESULT = padre;    
                                                     :}
 ;
-
+PRINT_::= tk_CADENA:a {:Nodo padre = new Nodo("E", "", 0,0);
+                        padre.AddHijo(new Nodo("tk_CADENA", a, aright, aleft));
+                       RESULT = padre;
+                        imprimir.print(a);
+                        :}
+        | IDENTIFICADOR:a {:Nodo padre = new Nodo("tk_CADENA", "", 0,0);
+                            padre.AddHijo(new Nodo("ID", a, aright, aleft));
+                            RESULT = padre;
+                             :}
+        | tk_PARIZQ:a IDENTIFICADOR:b tk_PARDER:c {:Nodo padre = new Nodo("E", "", 0,0);
+                                                    padre.AddHijo(new Nodo("tk_PARIZQ", a, aright, aleft));               
+                                                    padre.AddHijo(new Nodo("ID", b, bright, bleft));               
+                                                    padre.AddHijo(new Nodo("tk_PARDER", c, cright, cleft));               
+                                                    RESULT = padre;
+                                                     :}
+        | tk_PARIZQ:a tk_CADENA:b tk_PARDER:c {:Nodo padre = new Nodo("E", "", 0,0);
+                                                    padre.AddHijo(new Nodo("tk_PARIZQ", a, aright, aleft));               
+                                                    padre.AddHijo(new Nodo("tk_CADENA", b, bright, bleft));               
+                                                    padre.AddHijo(new Nodo("tk_PARDER", c, cright, cleft));               
+                                                    RESULT = padre;
+                                                     :}
+;
 //-----------------------------------------------------------------//
 //------------------------[Utilidades]-----------------------------//
 //-----------------------------------------------------------------//
@@ -163,10 +426,13 @@ TIPO::= res_CADENA:a {: Nodo padre = new Nodo("TIPO", "", 0,0);             //cr
                        padre.AddHijo(new Nodo("res_CADENA", "", aright, aleft));
                         RESULT=padre; :}
       | res_NUMERO:a {: Nodo padre = new Nodo("TIPO", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
-                       padre.AddHijo(new Nodo("res_num", "", aright, aleft));
+                       padre.AddHijo(new Nodo("res_NUM", "", aright, aleft));
+                        RESULT=padre; :}
+      | res_CARACTER:a {: Nodo padre = new Nodo("TIPO", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                       padre.AddHijo(new Nodo("res_CHAR", a, aright, aleft));
                         RESULT=padre; :}
       | res_BOOLEAN:a {: Nodo padre = new Nodo("TIPO", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
-                       padre.AddHijo(new Nodo("res_bool", a, aright, aleft));
+                       padre.AddHijo(new Nodo("res_BOOLEAN", a, aright, aleft));
                         RESULT=padre; :}
 ;
 
@@ -183,10 +449,34 @@ LISTID::= LISTID:a tk_COMA:b IDENTIFICADOR:c {:
                                      RESULT = padre;
                             :}
 ;
-LISTP::= LISTP tk_COMA IDENTIFICADOR TIPO
-        | IDENTIFICADOR TIPO
+LISTP::= LISTP:a tk_COMA:b IDENTIFICADOR:c TIPO:d {:
+                                                Nodo padre = new Nodo("LISTP", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                                padre.AddHijo(a);
+                                                padre.AddHijo (new Nodo("tk_COMA", b, bright,bleft));
+                                                padre.AddHijo (new Nodo("ID", c, cright,cleft));
+                                                padre.AddHijo(d);
+                                                RESULT = padre;
+                                                   :}
+        | IDENTIFICADOR:a TIPO:b {:
+                                     Nodo padre = new Nodo("LISTP", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+                                     padre.AddHijo (new Nodo("ID", a, 0,0));
+                                     padre.AddHijo(b);
+                                     RESULT = padre;
+                                 :}
 ;
+LISTP_::= LISTP_:a tk_COMA:b EXPRESION_NUM:c {:
+                                                Nodo padre = new Nodo("LISTP", "", 0,0);             
+                                                padre.AddHijo(a);
+                                                padre.AddHijo (new Nodo("tk_COMA", b, bright,bleft));
+                                                padre.AddHijo(c);
+                                                RESULT = padre;
+                                                   :}
+        | EXPRESION_NUM:a {: Nodo padre = new Nodo("LISTP", "", 0,0);
+                             padre.AddHijo(a);
+                             RESULT = padre;
+                                :}
 
+;
 EXPRESION_NUM ::= EXPRESION_NUM:a tk_MAS:b EXPRESION_NUM:c {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
                                                             padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
                                                             padre.AddHijo(new Nodo("mas", b, bright, bleft));       //agregamos como hijo el signo mas
@@ -211,10 +501,12 @@ EXPRESION_NUM ::= EXPRESION_NUM:a tk_MAS:b EXPRESION_NUM:c {: Nodo padre = new N
                                                             padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
                                                             RESULT = padre;                                         //retornamos el nodo padre
                                                             :}
-            | EXPRESION_NUM:a res_POTENCIA:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+            | EXPRESION_NUM:a res_POTENCIA:b tk_CORCHIZQ:c EXPRESION_NUM:e tk_CORCHDER:d {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
                                                             padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
                                                             padre.AddHijo(new Nodo("pow", b, bright, bleft));       //agregamos como hijo el signo mas
-                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("tk_CORCHIZQ", c, cright, cleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(e);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("tk_CORCHDER", d, dright, dleft));       //agregamos como hijo el signo mas
                                                             RESULT = padre;                                         //retornamos el nodo padre
                                                             :}
             | EXPRESION_NUM:a res_MOD:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
@@ -241,6 +533,10 @@ EXPRESION_NUM ::= EXPRESION_NUM:a tk_MAS:b EXPRESION_NUM:c {: Nodo padre = new N
                         padre.AddHijo(new Nodo("ID", a, aright, aleft));    
                         RESULT = padre;                                         
                         :}  
+            | CARACTER:a{: Nodo padre = new Nodo("E", "", 0,0); 
+                        padre.AddHijo(new Nodo("CARACTER", a, aright, aleft));    
+                        RESULT = padre;                                         
+                        :}  
             | tk_CADENA:a{: Nodo padre = new Nodo("E", "", 0,0); 
                         padre.AddHijo(new Nodo("tk_cadena", a, aright, aleft));    
                         RESULT = padre;                                         
@@ -254,33 +550,95 @@ EXPRESION_NUM ::= EXPRESION_NUM:a tk_MAS:b EXPRESION_NUM:c {: Nodo padre = new N
                         RESULT = padre;                                         
                         :}  
 ;
-RECURSIVE_INST::= INSTRUCCIONES RECURSIVE_INST
-              | INSTRUCCIONES
+RECURSIVE_INST::= INSTRUCCIONES:a RECURSIVE_INST:b {: Nodo padre = new Nodo("RECURSIVE_INST", "", 0,0); 
+                                                    padre.AddHijo(a);    
+                                                    padre.AddHijo(b);    
+                                                    RESULT = padre;                                         
+                                                    :}
+              | INSTRUCCIONES:a {: Nodo padre = new Nodo("RECURSIVE_INST", "", 0,0); 
+                                                    padre.AddHijo(a);    
+                                                    RESULT = padre;                                         
+                                                    :}
 ;
-INSTRUCCIONES::= DECLARA
-               | ASIGNA
-               | CONDICION
-               | SWITCH
-               | FOR
-               | WHILE
-               | HASTA
-               | PRINT
-;
-
-EXPRESION_logica::= EXPRESION_NUM res_MAYOR EXPRESION_NUM
-                  | EXPRESION_NUM res_MENOR EXPRESION_NUM
-                  | EXPRESION_NUM res_MENORIGUAL EXPRESION_NUM
-                  | EXPRESION_NUM res_MAYORIGUAL EXPRESION_NUM
-                  | EXPRESION_NUM res_ESIGUAL EXPRESION_NUM
-                  | EXPRESION_NUM res_ESDIFERENTE EXPRESION_NUM
-                  | EXPRESION_NUM res_AND EXPRESION_NUM
-                  | EXPRESION_NUM res_OR EXPRESION_NUM
-                  | EXPRESION_NUM res_NOT EXPRESION_NUM  
-
+INSTRUCCIONES::= DECLARA:a {: RESULT=a; :}
+               | ASIGNA:a {: RESULT=a; :}
+               | CONDICION:a {: RESULT=a; :}
+               | SWITCH:a {: RESULT=a; :}
+               | FOR:a {: RESULT=a; :}
+               | WHILE:a {: RESULT=a; :}
+               | HASTA:a {: RESULT=a; :}
+               | EJECUTAR:a {: RESULT=a; :}
+               | PRINT:a {: RESULT=a; :}
 ;
 
-
-
+EXPRESION_logica::= EXPRESION_NUM:a res_MAYOR:b EXPRESION_NUM:c {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("mayorQ", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                  | EXPRESION_NUM:a res_MENOR:b EXPRESION_NUM:c {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("menorQ", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                  | EXPRESION_NUM:a res_MENORIGUAL:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("menorIgual", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                  | EXPRESION_NUM:a res_MAYORIGUAL:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("mayorIgual", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                  | EXPRESION_NUM:a res_ESIGUAL:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("igual", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                  | EXPRESION_NUM:a res_ESDIFERENTE:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("diff", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                  | EXPRESION_NUM:a res_AND:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("AND", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                  | EXPRESION_NUM:a res_OR:b EXPRESION_NUM:c{: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(a);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("OR", b, bright, bleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(c);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                  | res_NOT:a EXPRESION_logica:b  {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                    padre.AddHijo(new Nodo("NOT", a, aright, aleft));       //agregamos como hijo el signo mas
+                                                    padre.AddHijo(b);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                    RESULT = padre;                                         //retornamos el nodo padre
+                                                    :}
+                  | res_NOT:a EXPRESION_NUM:b  {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                    padre.AddHijo(new Nodo("NOT", a, aright, aleft));       //agregamos como hijo el signo mas
+                                                    padre.AddHijo(b);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                    RESULT = padre;                                         //retornamos el nodo padre
+                                                    :}
+                  | tk_PARIZQ:a EXPRESION_logica:b tk_PARDER:c {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
+                                                            padre.AddHijo(b);                                       //agregamos como hijo el nodo que retorno la expresion
+                                                            padre.AddHijo(new Nodo("tk_PARIZQ", a, aright, aleft));       //agregamos como hijo el signo mas
+                                                            padre.AddHijo(new Nodo("tk_PARDER", c, cright, cleft));       //agregamos como hijo el signo mas
+                                                            RESULT = padre;                                         //retornamos el nodo padre
+                                                            :}
+                                                                 
+                                                            
+;
+ 
 
 
 

@@ -9,6 +9,7 @@ import analizadores.Analizador_Lexico;
 import analizadores.Analizador_sintactico;
 import arbol.AST;
 import arbol.Nodo;
+import arbol.translate_Python;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -34,9 +35,11 @@ import javax.swing.JPanel;
  */
 public class Form extends javax.swing.JFrame {
     ArrayList<String> variables = new ArrayList<String>();
+    public String Text;
     /**
      * Creates new form Form
      */
+    
     public Form() {
         initComponents();
     }
@@ -79,10 +82,9 @@ public class Form extends javax.swing.JFrame {
     }
 }
     public void encontrar_variables(Nodo nodo){
-        
         for(Nodo instruccion : nodo.hijos){
             
-            if(instruccion.token == "INSTRUCCION"){
+            if(instruccion.token == "INSTRUCCIONES"){
                 for(Nodo declaracion : instruccion.hijos){
                     if(declaracion.token == "tk_cadena"){
                         variables.add(declaracion.lexema);
@@ -95,7 +97,12 @@ public class Form extends javax.swing.JFrame {
             }
         }
     }
-    
+    public  void setText(){
+        translate_Python py = new translate_Python();
+//        py.makeFile();
+//        System.out.println(str);
+        textArea2.setText(py.mainText);
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -307,6 +314,11 @@ public class Form extends javax.swing.JFrame {
 
         jMenuItem3.setBackground(new java.awt.Color(255, 153, 51));
         jMenuItem3.setText("Flow chart");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem3);
 
         jMenuItem4.setBackground(new java.awt.Color(255, 153, 51));
@@ -353,7 +365,7 @@ public class Form extends javax.swing.JFrame {
     }//GEN-LAST:event_btStartActionPerformed
 
     private void btPythonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPythonActionPerformed
-        // TODO add your handling code here:
+        setText();
     }//GEN-LAST:event_btPythonActionPerformed
 
     private void btGolangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGolangActionPerformed
@@ -380,10 +392,10 @@ public class Form extends javax.swing.JFrame {
         }   
         if(raiz != null){
             variables.clear();
-            encontrar_variables(raiz);
+            encontrar_variables(raiz); 
             
-            AST arbol = new AST(raiz);
-            arbol.GraficarSintactico();
+//            AST arbol = new AST(raiz);
+//            arbol.GraficarSintactico();
         }
 //        textArea2.setText(text);
         
@@ -423,6 +435,11 @@ public class Form extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+       
+       // arbol.GraficarSintactico();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments

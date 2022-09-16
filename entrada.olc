@@ -74,35 +74,14 @@ java -jar java-cup-11b.jar -parser Analizador_sintactico -symbols sym A_sintacti
 
 /////////////////////////////
 
-EXPRESION_cadena::= EXPRESION_cadena tk_MAS EXPRESION_cadena
-                  | tk_CADENA 
-;
-//////////////
 
-EXPRESION_relacional::= EXPRESION_relacional tk_MAYQUE EXPRESION_relacional
-                      | EXPRESION_relacional tk_MENQUE EXPRESION_relacional
-                      | EXPRESION_relacional tk_IGUAL EXPRESION_relacional
-
-;
-EXPRESION_logica::= tk_COMA
-
-;
-
-
-EXPRESION_NUM ::= EXPRESION_NUM tk_MAS EXPRESION_NUM
-            | EXPRESION_NUM tk_MENOS EXPRESION_NUM
-            | EXPRESION_NUM tk_POR EXPRESION_NUM
-            | EXPRESION_NUM tk_DIVIDIDO EXPRESION_NUM
-            | EXPRESION_NUM res_POTENCIA EXPRESION_NUM
-            | EXPRESION_NUM res_MOD EXPRESION_NUM
-            | ENTERO
-            | tk_CADENA
-            | DECIMAL
-            | res_VERDADERO
-            | res_FALSO
-;
 
 inicio
-ingresar _pi1_            como numero con_valor 3;
-
+si _v1_ es_igual _v2_ entonces
+    		si _v1_  menor 3 entonces
+    			imprimir_nl "no tiene que imprimir este mensaje";
+			fin_si
+        imprimir_nl "este print es un ejemplo";
+fin_si
 fin
+

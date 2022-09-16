@@ -5,30 +5,46 @@
  */
 package arbol;
 
-import java.util.LinkedList;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
  *
  * @author josue
  */
 public class translate_Python {
-    public static LinkedList listaTokens;  
-    public String texto;
-
+    public static String mainText = "def main():\n";
+    public static String text;
+    public static String space = "  ";
+    
     public translate_Python() {
-    }
     
-    public Object sacarToken(){
-//        Este metodo saca el primer token de la lista
-        try {
-            return listaTokens.pop();
+    }
+    public void mText(String txt){
+        mainText += space+txt;
+    }
+    public void makeFile(){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try
+        {
+            fichero = new FileWriter("prueba.txt");
+            pw = new PrintWriter(fichero);
+
+           pw.println(mainText);
+
         } catch (Exception e) {
-            System.out.println(e);
-            return null;
+            e.printStackTrace();
+        } finally {
+           try {
+           // Nuevamente aprovechamos el finally para 
+           // asegurarnos que se cierra el fichero.
+           if (null != fichero)
+              fichero.close();
+           } catch (Exception e2) {
+              e2.printStackTrace();
+           }
         }
-    }
+}
     
-    public void analizar(){
-        System.out.println("");
-    }
 }

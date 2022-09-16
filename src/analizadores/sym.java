@@ -23,7 +23,7 @@ public class sym {
   public static final int res_CARACTER = 25;
   public static final int res_AND = 52;
   public static final int res_FINMETODO = 33;
-  public static final int tk_CADENA = 68;
+  public static final int tk_CADENA = 67;
   public static final int res_EJECUTAR = 28;
   public static final int res_ENTONCES = 27;
   public static final int res_MENORIGUAL = 47;
@@ -32,24 +32,25 @@ public class sym {
   public static final int res_FINSI = 19;
   public static final int res_RETORNAR = 26;
   public static final int tk_DIVIDIDO = 55;
-  public static final int tk_IGUAL = 67;
+  public static final int tk_CORCHDER = 62;
+  public static final int tk_IGUAL = 66;
   public static final int tk_LLAVDER = 60;
-  public static final int tk_PARIZQ = 61;
+  public static final int tk_PARIZQ = 63;
   public static final int ENTERO = 3;
   public static final int tk_PTCOMA = 57;
   public static final int res_MAYORIGUAL = 48;
   public static final int res_HASTA = 17;
   public static final int res_INGRESAR = 23;
-  public static final int tk_MENOS = 63;
+  public static final int tk_MENOS = 65;
   public static final int res_MENOR = 46;
   public static final int BLANCOS = 8;
   public static final int tk_COMA = 58;
-  public static final int tk_INCREMENTO = 69;
+  public static final int tk_INCREMENTO = 68;
   public static final int DECIMAL = 5;
   public static final int res_NOT = 53;
   public static final int res_OR = 51;
   public static final int res_FINFUNCION = 34;
-  public static final int tk_DECREMENTO = 70;
+  public static final int tk_DECREMENTO = 69;
   public static final int res_ELSEIF = 13;
   public static final int res_INICIO = 9;
   public static final int res_POTENCIA = 43;
@@ -60,25 +61,25 @@ public class sym {
   public static final int res_REPETIR = 21;
   public static final int res_MOD = 44;
   public static final int res_SEGUN = 15;
+  public static final int tk_ASKC = 71;
   public static final int EOF = 0;
+  public static final int tk_ASKA = 72;
   public static final int res_PARA = 14;
   public static final int tk_POR = 56;
   public static final int res_METODOCONP = 40;
   public static final int CARACTER = 4;
-  public static final int tk_MENQUE = 65;
   public static final int res_CONVALOR = 31;
   public static final int error = 1;
-  public static final int tk_MAYQUE = 66;
   public static final int res_ESIGUAL = 49;
   public static final int res_FIN = 10;
+  public static final int tk_CORCHIZQ = 61;
   public static final int res_ELSE = 39;
   public static final int res_HASTAQ = 32;
   public static final int tk_LLAVIZQ = 59;
-  public static final int tk_CONCAT = 64;
-  public static final int tk_ASIGNAFLECHA = 71;
+  public static final int tk_ASIGNAFLECHA = 70;
   public static final int res_SI = 11;
   public static final int res_ESDIFERENTE = 50;
-  public static final int tk_PARDER = 62;
+  public static final int tk_PARDER = 64;
   public static final int res_FUNCION = 37;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -142,17 +143,18 @@ public class sym {
   "tk_COMA",
   "tk_LLAVIZQ",
   "tk_LLAVDER",
+  "tk_CORCHIZQ",
+  "tk_CORCHDER",
   "tk_PARIZQ",
   "tk_PARDER",
   "tk_MENOS",
-  "tk_CONCAT",
-  "tk_MENQUE",
-  "tk_MAYQUE",
   "tk_IGUAL",
   "tk_CADENA",
   "tk_INCREMENTO",
   "tk_DECREMENTO",
-  "tk_ASIGNAFLECHA"
+  "tk_ASIGNAFLECHA",
+  "tk_ASKC",
+  "tk_ASKA"
   };
 }
 
