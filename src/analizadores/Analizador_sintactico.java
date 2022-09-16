@@ -6,10 +6,10 @@
 package analizadores;
 
 import java_cup.runtime.Symbol;
-import arbol.Imprimir;
 import java.util.LinkedList;
 import arbol.Nodo;
 import arbol.Imprimir;
+import arbol.Declarar;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -761,6 +761,7 @@ public class Analizador_sintactico extends java_cup.runtime.lr_parser {
 
         public static Nodo raiz;
         public static Imprimir imprimir = new Imprimir();
+        public static Declarar declarar = new Declarar();
         
         
         public Nodo getRaiz(){      
@@ -1049,7 +1050,8 @@ class CUP$Analizador_sintactico$actions {
                                                                             padre.AddHijo(new Nodo("res_CVALOR", e, eright, eleft));             //agregamos como hijo el signo ptcoma
                                                                             padre.AddHijo(f);                                                        //agregamos como hijo el identificador de la cadena
                                                                             padre.AddHijo(new Nodo("tk_PTCOMA", ";", 0, 0));             //agregamos como hijo el signo ptcoma
-                                                                            RESULT = padre;                                                                             
+                                                                            RESULT = padre;      
+                                                                            declarar.declarar(b,d,f);
                                                                                     
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("DECLARA",4, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-6)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
@@ -2179,8 +2181,8 @@ class CUP$Analizador_sintactico$actions {
 		String a = (String)((java_cup.runtime.Symbol) CUP$Analizador_sintactico$stack.peek()).value;
 		Nodo padre = new Nodo("E", "", 0,0);
                         padre.AddHijo(new Nodo("tk_CADENA", a, aright, aleft));
-                       RESULT = padre;
-                        imprimir.print(a);
+                        RESULT = padre;
+                        imprimir.print(a,true);
                         
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("PRINT_",13, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
@@ -2196,6 +2198,7 @@ class CUP$Analizador_sintactico$actions {
 		Nodo padre = new Nodo("tk_CADENA", "", 0,0);
                             padre.AddHijo(new Nodo("ID", a, aright, aleft));
                             RESULT = padre;
+                            imprimir.print(a,false);
                              
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("PRINT_",13, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
@@ -2219,6 +2222,7 @@ class CUP$Analizador_sintactico$actions {
                                                     padre.AddHijo(new Nodo("ID", b, bright, bleft));               
                                                     padre.AddHijo(new Nodo("tk_PARDER", c, cright, cleft));               
                                                     RESULT = padre;
+                                                    imprimir.print(b,false);
                                                      
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("PRINT_",13, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }
@@ -2242,6 +2246,7 @@ class CUP$Analizador_sintactico$actions {
                                                     padre.AddHijo(new Nodo("tk_CADENA", b, bright, bleft));               
                                                     padre.AddHijo(new Nodo("tk_PARDER", c, cright, cleft));               
                                                     RESULT = padre;
+                                                    imprimir.print(b,true);
                                                      
               CUP$Analizador_sintactico$result = parser.getSymbolFactory().newSymbol("PRINT_",13, ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.elementAt(CUP$Analizador_sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Analizador_sintactico$stack.peek()), RESULT);
             }

@@ -24,6 +24,7 @@ public class AST {
     
     public AST(Nodo raiz){
         this.raiz = raiz;
+        
     }
     
      public void GraficarSintactico(){
@@ -47,6 +48,7 @@ public class AST {
         
         if( !(nodo.lexema.equals("")) ){
             String nodoToken = nodo.lexema; 
+            
             nodoToken = nodoToken.replace("\"", "");
             r += "node" + i + "c[label = \"" + nodoToken + "\"];\n";
             r += "node" + i + " -> node" + i + "c\n";
@@ -97,8 +99,5 @@ public class AST {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-       
-     
-       Desktop.getDesktop().open(new File(file_get_path));
     }
 }

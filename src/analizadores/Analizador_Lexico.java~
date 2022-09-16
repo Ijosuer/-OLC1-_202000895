@@ -1028,7 +1028,7 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 128: break;
           case 56: 
-            { return new Symbol(sym.res_EJECUTAR,yyline,yychar, yytext());
+            { System.out.println("Reconocio RES:ejecutar");return new Symbol(sym.res_EJECUTAR,yyline,yychar, yytext());
             } 
             // fall through
           case 129: break;

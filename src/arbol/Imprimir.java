@@ -9,23 +9,35 @@ package arbol;
  * @author josue
  */
 import arbol.translate_Python;
+import arbol.translate_Go;
 public class Imprimir {
     public Imprimir() {
     }
     public translate_Python py = new translate_Python();
+    public translate_Go go = new translate_Go();
 //    PRINT::= res_IMPRIMIR:a  PRINT_:b tk_PTCOMA:c
-    public void print(String a){
-        py_Print(a);
-        go_Print(a);
+    public void print(String a, boolean flag){
+        py_Print(a,flag);
+        go_Print(a,flag);
     }
-    public void py_Print(String a){
-        System.out.println("llega");
+    public void py_Print(String a, boolean flag){
+        if (flag == true){
         String txt = ("print(\'"+a+"\')\n");
         py.mText(txt);
-
+        }else{
+        String txt = ("print("+a+")\n");
+        py.mText(txt);
+        }
+    
     }
-    public void go_Print(String a){
-        System.out.println("fmt.Print(\'"+a+"\')");
+    public void go_Print(String a,boolean flag){
+        if (flag == true){
+        String txt = ("fmt.Println(\""+a+"\")\n");
+        go.mText(txt);
+        }else{
+        String txt = ("fmt.Println("+a+")\n");
+        go.mText(txt);
+        }
     }
         
 }

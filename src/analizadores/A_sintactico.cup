@@ -2,16 +2,16 @@
 package analizadores;
 
 import java_cup.runtime.Symbol;
-import arbol.Imprimir;
 import java.util.LinkedList;
 import arbol.Nodo;
 import arbol.Imprimir;
+import arbol.Declarar;
 
 parser code 
 {:
         public static Nodo raiz;
         public static Imprimir imprimir = new Imprimir();
-        
+        public static Declarar declarar = new Declarar();
         
         public Nodo getRaiz(){      
             return raiz;
@@ -94,7 +94,8 @@ DECLARA::= res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_NU
                                                                             padre.AddHijo(new Nodo("res_CVALOR", e, eright, eleft));             //agregamos como hijo el signo ptcoma
                                                                             padre.AddHijo(f);                                                        //agregamos como hijo el identificador de la cadena
                                                                             padre.AddHijo(new Nodo("tk_PTCOMA", ";", 0, 0));             //agregamos como hijo el signo ptcoma
-                                                                            RESULT = padre;                                                                             
+                                                                            RESULT = padre;      
+                                                                            declarar.declarar(b,d,f);
                                                                                     :}
         | res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_logica:f tk_PTCOMA:g {:
                                                                             Nodo padre = new Nodo("DECLARACION", "", 0,0);
@@ -398,24 +399,27 @@ PRINT::= res_IMPRIMIR:a  PRINT_:b tk_PTCOMA:c {:
 ;
 PRINT_::= tk_CADENA:a {:Nodo padre = new Nodo("E", "", 0,0);
                         padre.AddHijo(new Nodo("tk_CADENA", a, aright, aleft));
-                       RESULT = padre;
-                        imprimir.print(a);
+                        RESULT = padre;
+                        imprimir.print(a,true);
                         :}
         | IDENTIFICADOR:a {:Nodo padre = new Nodo("tk_CADENA", "", 0,0);
                             padre.AddHijo(new Nodo("ID", a, aright, aleft));
                             RESULT = padre;
+                            imprimir.print(a,false);
                              :}
         | tk_PARIZQ:a IDENTIFICADOR:b tk_PARDER:c {:Nodo padre = new Nodo("E", "", 0,0);
                                                     padre.AddHijo(new Nodo("tk_PARIZQ", a, aright, aleft));               
                                                     padre.AddHijo(new Nodo("ID", b, bright, bleft));               
                                                     padre.AddHijo(new Nodo("tk_PARDER", c, cright, cleft));               
                                                     RESULT = padre;
+                                                    imprimir.print(b,false);
                                                      :}
         | tk_PARIZQ:a tk_CADENA:b tk_PARDER:c {:Nodo padre = new Nodo("E", "", 0,0);
                                                     padre.AddHijo(new Nodo("tk_PARIZQ", a, aright, aleft));               
                                                     padre.AddHijo(new Nodo("tk_CADENA", b, bright, bleft));               
                                                     padre.AddHijo(new Nodo("tk_PARDER", c, cright, cleft));               
                                                     RESULT = padre;
+                                                    imprimir.print(b,true);
                                                      :}
 ;
 //-----------------------------------------------------------------//

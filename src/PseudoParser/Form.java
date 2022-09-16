@@ -9,8 +9,10 @@ import analizadores.Analizador_Lexico;
 import analizadores.Analizador_sintactico;
 import arbol.AST;
 import arbol.Nodo;
+import arbol.translate_Go;
 import arbol.translate_Python;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -97,11 +99,19 @@ public class Form extends javax.swing.JFrame {
             }
         }
     }
-    public  void setText(){
+    public  void setPyText(){
         translate_Python py = new translate_Python();
 //        py.makeFile();
 //        System.out.println(str);
-        textArea2.setText(py.mainText);
+        textArea2.setText(py.mainText+py.mainlastText);
+        py.clean();
+    }
+    public void setGoText(){
+        translate_Go go = new translate_Go();
+        go.fText();
+        textArea2.setText(go.mainText);
+        go.clean();
+        
     }
     
     /**
@@ -313,7 +323,7 @@ public class Form extends javax.swing.JFrame {
         jMenu2.setPreferredSize(new java.awt.Dimension(60, 30));
 
         jMenuItem3.setBackground(new java.awt.Color(255, 153, 51));
-        jMenuItem3.setText("Flow chart");
+        jMenuItem3.setText("AST");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -328,7 +338,7 @@ public class Form extends javax.swing.JFrame {
         navBar.add(jMenu2);
 
         jMenu3.setBackground(new java.awt.Color(102, 102, 0));
-        jMenu3.setText("Edit");
+        jMenu3.setText("VIew");
         jMenu3.setPreferredSize(new java.awt.Dimension(60, 30));
 
         jMenuItem5.setBackground(new java.awt.Color(255, 153, 51));
@@ -360,23 +370,6 @@ public class Form extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStartActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this.rootPane, "Proceso de compilacion DONE(:");
-    }//GEN-LAST:event_btStartActionPerformed
-
-    private void btPythonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPythonActionPerformed
-        setText();
-    }//GEN-LAST:event_btPythonActionPerformed
-
-    private void btGolangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGolangActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btGolangActionPerformed
-
-    private void btCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCleanActionPerformed
-        // TODO add your handling code here:
-//        JOptionPane.showMessageDialog(this.rootPane, "Hello world");
-            
-//        -------------------------------
         Nodo raiz = null;
         String text  = textArea1.getText();
         try {
@@ -394,10 +387,24 @@ public class Form extends javax.swing.JFrame {
             variables.clear();
             encontrar_variables(raiz); 
             
-//            AST arbol = new AST(raiz);
-//            arbol.GraficarSintactico();
+            AST arbol = new AST(raiz);
+            arbol.GraficarSintactico();
         }
-//        textArea2.setText(text);
+        JOptionPane.showMessageDialog(this.rootPane, "Proceso de compilacion DONE(:");
+    }//GEN-LAST:event_btStartActionPerformed
+
+    private void btPythonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPythonActionPerformed
+        setPyText();
+    }//GEN-LAST:event_btPythonActionPerformed
+
+    private void btGolangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGolangActionPerformed
+        setGoText();
+    }//GEN-LAST:event_btGolangActionPerformed
+
+    private void btCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCleanActionPerformed
+        // TODO add your handling code here:
+
+        textArea1.setText("INICIO\n\nFIN");
         
     }//GEN-LAST:event_btCleanActionPerformed
 
@@ -437,8 +444,12 @@ public class Form extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-       
-       // arbol.GraficarSintactico();
+        String file_get_path = "C:\\Users\\josue\\Documents\\NetBeansProjects\\OLC1_Proyecto1\\Arbol_Sintactico.jpg" ;
+        try {
+            Desktop.getDesktop().open(new File(file_get_path));
+        } catch (IOException ex) {
+            Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**

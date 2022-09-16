@@ -15,7 +15,8 @@ import java.io.PrintWriter;
 public class translate_Python {
     public static String mainText = "def main():\n";
     public static String text;
-    public static String space = "  ";
+    public static String space = "    ";
+    public final String mainlastText = "\nif __name__ == \"__main__\":\n" +space+"main()";
     
     public translate_Python() {
     
@@ -30,7 +31,7 @@ public class translate_Python {
         {
             fichero = new FileWriter("prueba.txt");
             pw = new PrintWriter(fichero);
-
+           mainText += mainlastText;
            pw.println(mainText);
 
         } catch (Exception e) {
@@ -45,6 +46,10 @@ public class translate_Python {
               e2.printStackTrace();
            }
         }
+    }
+    public void clean(){
+        mainText = "def main():\n";
+        
 }
     
 }
