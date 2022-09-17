@@ -30,7 +30,6 @@ public class AST {
      public void GraficarSintactico(){
         String grafica = "digraph AST{\n\n" + GraficaNodos(this.raiz, "0") + "\n\n}";        
         GenerarDot(grafica);
-
     }
     
     private String GraficaNodos(Nodo nodo, String i){

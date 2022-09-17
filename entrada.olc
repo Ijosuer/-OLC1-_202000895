@@ -48,7 +48,6 @@ si _v1_ es_igual _v2_ entonces
 	imprimir_nl "Al parecer no funciona la asignacion";
 	ingresar _anio3_          como numero con_valor 4;
 	_variable1_ -> _variable1_ + 1;
-	
 fin_si
 
 si _v1_ es_igual _v2_ entonces

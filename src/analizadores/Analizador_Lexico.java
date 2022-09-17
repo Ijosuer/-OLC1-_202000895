@@ -2,6 +2,7 @@
 
 package analizadores;
 import java_cup.runtime.*;
+import arbol.Errores;
 
 
 /**
@@ -381,6 +382,9 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
 
   /* user code: */
     //----> Codigo de usuario en sintaxis java
+Errores error = new Errores("", "", 0, 0);
+
+
 
 
   /**
@@ -754,6 +758,7 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
             { System.err.println("Este es un error lexico: "+yytext()+", en la linea: "+yyline+", en la columna: "+yychar);
+    error.addError("",yytext(),yyline,yychar);
             } 
             // fall through
           case 74: break;

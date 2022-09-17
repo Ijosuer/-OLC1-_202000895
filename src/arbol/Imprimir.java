@@ -15,6 +15,7 @@ public class Imprimir {
     }
     public translate_Python py = new translate_Python();
     public translate_Go go = new translate_Go();
+    String txt;
 //    PRINT::= res_IMPRIMIR:a  PRINT_:b tk_PTCOMA:c
     public void print(String a, boolean flag){
         py_Print(a,flag);
@@ -22,13 +23,15 @@ public class Imprimir {
     }
     public void py_Print(String a, boolean flag){
         if (flag == true){
-        String txt = ("print(\'"+a+"\')\n");
+        txt = ("print(\'"+a+"\')\n");
         py.mText(txt);
         }else{
-        String txt = ("print("+a+")\n");
+        txt = ("print("+a+")\n");
         py.mText(txt);
         }
-    
+    }
+    public String returnPrint(){
+        return "SIMON EMPTY";
     }
     public void go_Print(String a,boolean flag){
         if (flag == true){
@@ -39,5 +42,4 @@ public class Imprimir {
         go.mText(txt);
         }
     }
-        
 }

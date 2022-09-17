@@ -9,6 +9,7 @@ import analizadores.Analizador_Lexico;
 import analizadores.Analizador_sintactico;
 import arbol.AST;
 import arbol.Nodo;
+import arbol.Errores;
 import arbol.translate_Go;
 import arbol.translate_Python;
 import java.awt.Color;
@@ -333,6 +334,11 @@ public class Form extends javax.swing.JFrame {
 
         jMenuItem4.setBackground(new java.awt.Color(255, 153, 51));
         jMenuItem4.setText("Errors");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem4);
 
         navBar.add(jMenu2);
@@ -402,8 +408,7 @@ public class Form extends javax.swing.JFrame {
     }//GEN-LAST:event_btGolangActionPerformed
 
     private void btCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCleanActionPerformed
-        // TODO add your handling code here:
-
+        // TODO add your handling code here
         textArea1.setText("INICIO\n\nFIN");
         
     }//GEN-LAST:event_btCleanActionPerformed
@@ -451,6 +456,17 @@ public class Form extends javax.swing.JFrame {
             Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        Errores error = new Errores("", "", 0, 0);
+        error.makeHTML();
+        String file_get_path = "C:\\Users\\josue\\Documents\\NetBeansProjects\\OLC1_Proyecto1\\Errores_Lexicos.html" ;
+        try {
+            Desktop.getDesktop().open(new File(file_get_path));
+        } catch (IOException ex) {
+            Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -1,9 +1,13 @@
 package analizadores;
 import java_cup.runtime.*;
+import arbol.Error;
 
 %%
 %{
     //----> Codigo de usuario en sintaxis java
+Error error = new Error("", "", 0, 0);
+
+
 %}
 //directrices
 
@@ -140,6 +144,7 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 
 . {
     System.err.println("Este es un error lexico: "+yytext()+", en la linea: "+yyline+", en la columna: "+yychar);
+    error.addError("",yytext(),yyline,yychar);
 }
 
 

@@ -6,18 +6,21 @@ import java.util.LinkedList;
 import arbol.Nodo;
 import arbol.Imprimir;
 import arbol.Declarar;
+import arbol.Asignar;
+import arbol.If;
 
 parser code 
 {:
         public static Nodo raiz;
         public static Imprimir imprimir = new Imprimir();
         public static Declarar declarar = new Declarar();
+        public static Asignar asignar = new Asignar();
+        public static If condicion = new If();
         
         public Nodo getRaiz(){      
             return raiz;
         }
         
-
         public void syntax_error(Symbol s)
         {
             System.err.println("Error en la Linea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
@@ -47,7 +50,7 @@ non terminal Nodo LISTID,TIPO,INSTRUCCIONES,EXPRESION_NUM,EXPRESION_logica,SWITC
 non terminal Nodo RECURSIVE_INST,ELSEIF,LISTP,LISTP_,EJECUTAR,RETORNAR;
 
 precedence left tk_MAS,tk_MENOS,tk_POR,tk_DIVIDIDO,res_MOD,res_POTENCIA ;
-
+precedence right res_NOT;
 start with INICIO;
 
 INICIO::= I:a {: parser.raiz = a; :} //Raiz del AST
@@ -71,6 +74,7 @@ RECURSIVE::=  RECURSIVE:a BEGIN:b {: Nodo padre = new Nodo("INSTRUCCIONES", "", 
                                   padre.AddHijo(a); 
                                   RESULT = padre; :}
                 | error tk_PTCOMA:a  {: Nodo padre = new Nodo("", "", 0,0);:}
+                | error tk_ASIGNAFLECHA:a  {: Nodo padre = new Nodo("", "", 0,0);:}
 ;
 
 BEGIN::= DECLARA:a {: RESULT=a; :}
@@ -105,7 +109,8 @@ DECLARA::= res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_NU
                                                                             padre.AddHijo(d);             
                                                                             padre.AddHijo(new Nodo("res_CVALOR", e, eright, eleft));             
                                                                             padre.AddHijo(f);                                                 
-                                                                            padre.AddHijo(new Nodo("tk_PTCOMA", ";", 0, 0));             
+                                                                            padre.AddHijo(new Nodo("tk_PTCOMA", ";", 0, 0));
+                                                                            declarar.declarar(b,d,f);
                                                                             RESULT = padre;                                                                             
                                                                                     :}
 ;
@@ -115,17 +120,20 @@ ASIGNA::= LISTID:a tk_ASIGNAFLECHA:b EXPRESION_NUM:c tk_PTCOMA:d {: Nodo padre =
                                                                     padre.AddHijo(new Nodo("tk_FLECHA", b, bright, bleft)); 
                                                                     padre.AddHijo(c); 
                                                                     padre.AddHijo(new Nodo("tk_PTCOMA", d, dright, dleft)); 
-                                                                    RESULT = padre; :}
+                                                                    RESULT = padre; 
+                                                                    asignar.asignar(a,c);:}
 ;
 
 //---->CONDICIONES<----
-CONDICION::= res_SI:a EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d res_FINSI:e {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
+CONDICION::= res_SI:a EXPRESION_logica:b res_ENTONCES:c  RECURSIVE_INST:d res_FINSI:e {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
                                                                                     padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
                                                                                     padre.AddHijo(b); 
                                                                                     padre.AddHijo(new Nodo("res_THEN", c, cright, cleft)); 
                                                                                     padre.AddHijo(d); 
                                                                                     padre.AddHijo(new Nodo("res_FINSI", e, eright, eleft)); 
-                                                                                    RESULT = padre; :}
+                                                                                    RESULT = padre;
+                                                                                    condicion.condicion(b,d);
+                                                                                     :}
            | res_SI:a EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d ELSEIF:e res_FINSI:f {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
                                                                                     padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
                                                                                     padre.AddHijo(b); 
@@ -242,7 +250,7 @@ FOR::= res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESI
                                                                                     padre.AddHijo(new Nodo("res_PARAFION", z, zright, zleft)); 
                                                                                     RESULT = padre;  :}
 ;
-//ESTA PENDIENTE WHUILEEEEEEE******
+
 WHILE::= res_MIENTRAS:a EXPRESION_logica:b res_HACER:c RECURSIVE_INST:d res_FINMIENTRAS:e {: Nodo padre = new Nodo("WHILE", "", 0,0);
                                                                                     padre.AddHijo(new Nodo("res_WHILE", a, aright, aleft)); 
                                                                                     padre.AddHijo(b); 
@@ -270,7 +278,7 @@ HASTA::= res_REPETIR:a  RECURSIVE_INST:b res_HASTAQ:c EXPRESION_logica:d {: Nodo
                                                             RESULT = padre;  :}
 ;
 
-//---------Switch queda pendiente xd
+
 SWITCH::= res_SEGUN:a EXPRESION_NUM:b res_HACER:c SWITCH_:d res_FINSEGUN:e {: Nodo padre = new Nodo("SWITCH", "", 0,0);
                                                                             padre.AddHijo(new Nodo("res_SEGUN", a, aright, aleft)); 
                                                                             padre.AddHijo(b);
@@ -572,7 +580,7 @@ INSTRUCCIONES::= DECLARA:a {: RESULT=a; :}
                | WHILE:a {: RESULT=a; :}
                | HASTA:a {: RESULT=a; :}
                | EJECUTAR:a {: RESULT=a; :}
-               | PRINT:a {: RESULT=a; :}
+               | PRINT:a {:imprimir.returnPrint();   RESULT=a; :}
 ;
 
 EXPRESION_logica::= EXPRESION_NUM:a res_MAYOR:b EXPRESION_NUM:c {: Nodo padre = new Nodo("E", "", 0,0);                   //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion 
