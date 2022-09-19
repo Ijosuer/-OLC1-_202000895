@@ -16,11 +16,12 @@ public class Asignar {
     public translate_Go go = new translate_Go();
     String text="";
     String IDs="";
+    Nodo a;Nodo E;
     public Asignar() {
     }
     
 //    LISTID:a tk_ASIGNAFLECHA:b EXPRESION_NUM:c tk_PTCOMA:d
-    public void asignar(Nodo a,Nodo E){
+    public void asignar(){
         py_Asignar(a,E);
         go_Asignar(a,E);
     }

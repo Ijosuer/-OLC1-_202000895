@@ -11,6 +11,7 @@ package arbol;
  */
 import arbol.translate_Python;
 import arbol.translate_Go;
+import java.util.ArrayList;
 public class Declarar {
 public translate_Python py = new translate_Python();
 public translate_Go go = new translate_Go();
@@ -19,10 +20,14 @@ public Declarar() {
     }
 String text="";
 String IDs="";
-    
-    public void declarar(Nodo b,Nodo tipo, Nodo E ){
-        py_Declarar(b,tipo,E,"0");
-        go_Declarar(b,tipo,E,"0");
+
+
+Nodo b;Nodo tipo; Nodo E; 
+    public ArrayList<String> declarar(){
+        ArrayList textos = new ArrayList();
+        textos.add( py_Declarar(b,tipo,E,"0"));
+    textos.add( go_Declarar(b,tipo,E,"0"));
+        return (textos);
     }
     public String getExpression( Nodo nodo,String i){
         int k =0;
@@ -59,7 +64,7 @@ String IDs="";
     }
     
 //res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_NUM:f tk_PTCOMA:g
-    public void py_Declarar(Nodo b, Nodo tipo, Nodo nodo, String i){
+    public String py_Declarar(Nodo b, Nodo tipo, Nodo nodo, String i){
         String translate = "";
         String id = "";
         getExpression(nodo,i);
@@ -123,11 +128,13 @@ String IDs="";
         
         text = "";
         IDs = "";
+        return translate;
 //        translate = "";
-        py.mText(translate);
+//        py.mText(translate);
+//        System.out.println(translate);
     }
     
-    public void go_Declarar(Nodo b, Nodo tipo, Nodo nodo, String i){
+    public String go_Declarar(Nodo b, Nodo tipo, Nodo nodo, String i){
         String translate = "";
         getExpression(nodo,i);
         String id = b.hijos.get(0).lexema;
@@ -139,13 +146,13 @@ String IDs="";
         }else{
             if(text.equals("falso")){
                 translate = "var "+id+" = false\n";
-            }else{
+            }else if (text.equals("verdadero")){
                 System.out.println(text);
                 translate = "var "+id+" = true \n";
             }
         }
         text = "";
-        go.mText(translate);
-        
+//        go.mText(translate);
+        return translate;
     }
 }

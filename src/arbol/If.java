@@ -4,29 +4,34 @@
  * and open the template in the editor.
  */
 package arbol;
+
+import java.util.ArrayList;
+
 /**
  *
  * @author josue
  */
 public class If {
-    public translate_Python py = new translate_Python();
-    public translate_Go go = new translate_Go();
     public Imprimir print = new Imprimir();
     String text="";
     String IDs="";
-
+    Nodo b;
+    String instruccionpy;
+    String instruccionGo;
     public If() {
     }
 //    res_SI:a EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d res_FINSI:e
-    public void condicion(Nodo b, Nodo d){
-        py_If(b,d);
-//        go_If();
+    public ArrayList<String> condicion(){
+        ArrayList textos = new ArrayList();
+        textos.add( py_If(b,instruccionpy));
+        textos.add( go_If(b,instruccionGo));
+        return (textos);
     }
     public String getExpression( Nodo nodo,String i){
         int k =0;
         String r="";
         for(int j =0 ; j<=nodo.hijos.size()-1; j++){
-            r= r + getExpression(nodo.hijos.get(j), ""+i+k);
+            getExpression(nodo.hijos.get(j), ""+i+k);
             k++;
         }
         
@@ -34,8 +39,10 @@ public class If {
             String nodoToken = nodo.lexema; 
             nodoToken = nodoToken.replace("\"", "");
             text+=nodoToken+",";
+//            text+=nodoToken+"";
             text = text.replace("\n", " ");
         }
+        r = "";
         return text;
     }
     public String getcondition( Nodo nodo,String i){
@@ -54,41 +61,82 @@ public class If {
         }
         return IDs;
     }
-    public void py_If(Nodo b, Nodo d){
+    public String py_If(Nodo b, String d){
+        String translate = ""; 
+        String idk = ""; 
+        idk = getExpression(b, "0");
+        String[] condi = idk.split(",");
+        
+//        String inst = getcondition(d, "0");
+        
+        String var1 =condi[0];
+        String condicion =condi[1];
+        String var2 =condi[2];
+        text = "";
+        translate = "if ";
+        if(condicion.equals("mayor")){
+            translate+=var1+" > "+var2+":\n        "
+                    +"\n        "+d+"\n    ";return translate;
+        }else if(condicion.equals("menor")){
+            translate+=var1+" < "+var2+":\n        "
+                    +"\n        "+d+"\n    ";return translate;
+        }else if(condicion.equals("es_igual")){
+            translate+=var1+" == "+var2+":\n        "
+                    +"\n        "+d+"    ";return translate;
+        }else if(condicion.equals("menor_o_igual")){
+            translate+=var1+" <= "+var2+":\n        "
+                    +"\n        "+d+"\n    ";return translate;
+        }else if(condicion.equals("mayor_o_igual")){
+            translate+=var1+" >= "+var2+":\n        "
+                    +"\n        "+d+"\n    ";
+        }else if(condicion.equals("es_diferente")){
+            translate+=var1+" != "+var2+":\n        "
+                    +"\n        "+d+"\n    ";
+        }else if(condicion.equals("")){
+            translate+=var1+":\n        "
+                    +"\n        "+d+"\n    ";
+        }
+        IDs= "";
+//        py.mText(translate);
+        return translate;
+    }
+    public String go_If(Nodo b,String d){
         String translate = ""; 
         String idk = getExpression(b, "0");
         String[] condi = idk.split(",");
-        String inst = getcondition(d, "0");
+//        String inst = getcondition(d, "0");
         
         String var1 =condi[0];
         String condicion =condi[1];
         String var2 =condi[2];
         translate = "if ";
         if(condicion.equals("mayor")){
-            translate+=var1+" > "+var2+":\n        #"
-                    +"\n        pass\n    ";
+            translate+=var1+" > "+var2+"{\n        "
+                    +" "+d+"          }\n";
         }else if(condicion.equals("menor")){
-            translate+=var1+" < "+var2+":\n        #"
-                    +"\n        pass\n    ";
+            translate+=var1+" < "+var2+"{\n        "
+                    +" "+d+"       \n    }\n";
         }else if(condicion.equals("es_igual")){
-            translate+=var1+" = "+var2+":\n        #"
-                    +"\n        pass\n    ";
+            translate+=var1+" == "+var2+"{\n        "
+                    +" "+d+"    }\n";return translate;
         }else if(condicion.equals("menor_o_igual")){
-            translate+=var1+" <= "+var2+":\n        #"
-                    +"\n        pass\n    ";
+            translate+=var1+" <= "+var2+"{\n        "
+                    +" "+d+"    }\n";return translate;
         }else if(condicion.equals("mayor_o_igual")){
-            translate+=var1+" >= "+var2+":\n        #"
-                    +"\n        pass\n    ";
+            translate+=var1+" >= "+var2+"{\n        "
+                    +" "+d+"           }\n";
         }else if(condicion.equals("es_diferente")){
-            translate+=var1+" != "+var2+":\n        #"
-                    +"\n        pass\n    ";
-        }else if(condicion.equals("")){
-            translate+=var1+":\n        #"
-                    +"\n        pass\n    ";
+            translate+=var1+" != "+var2+"{\n        "
+                    +" "+d+"           }\n";
+        }else if(var2.equals("")){
+            translate+=var1+"{\n        "
+                    +" "+d+"         }\n  ";
         }
         IDs= "";
         text = "";
-        py.mText(translate);
+//        go.mText(translate);
+        System.out.println(translate);
+        return translate;
     }
     
 }

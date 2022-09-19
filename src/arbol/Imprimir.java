@@ -10,36 +10,44 @@ package arbol;
  */
 import arbol.translate_Python;
 import arbol.translate_Go;
+import java.util.ArrayList;
 public class Imprimir {
     public Imprimir() {
     }
-    public translate_Python py = new translate_Python();
-    public translate_Go go = new translate_Go();
+//    public translate_Python py = new translate_Python();
+//    public translate_Go go = new translate_Go();
     String txt;
 //    PRINT::= res_IMPRIMIR:a  PRINT_:b tk_PTCOMA:c
-    public void print(String a, boolean flag){
-        py_Print(a,flag);
-        go_Print(a,flag);
+    public ArrayList<String> print(String a, boolean flag){
+        
+        ArrayList textos = new ArrayList();
+        textos.add( py_Print(a,flag));
+        textos.add( go_Print(a,flag));
+        return (textos);
     }
-    public void py_Print(String a, boolean flag){
+    public String py_Print(String a, boolean flag){
         if (flag == true){
         txt = ("print(\'"+a+"\')\n");
-        py.mText(txt);
+        return(txt);
+//            System.out.println(txt);
+
         }else{
         txt = ("print("+a+")\n");
-        py.mText(txt);
+        return(txt);
         }
     }
     public String returnPrint(){
         return "SIMON EMPTY";
     }
-    public void go_Print(String a,boolean flag){
+    public String go_Print(String a,boolean flag){
         if (flag == true){
-        String txt = ("fmt.Println(\""+a+"\")\n");
-        go.mText(txt);
+//        String txt = ("fmt.Println(\""+a+"\")\n");
+//        go.mText(txt);
+        return ("fmt.Println(\""+a+"\")\n");
         }else{
         String txt = ("fmt.Println("+a+")\n");
-        go.mText(txt);
+//        go.mText(txt);
+        return txt;
         }
     }
 }

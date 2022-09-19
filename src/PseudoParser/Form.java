@@ -12,6 +12,7 @@ import arbol.Nodo;
 import arbol.Errores;
 import arbol.translate_Go;
 import arbol.translate_Python;
+import arbol.Instruccion;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.GradientPaint;
@@ -37,7 +38,7 @@ import javax.swing.JPanel;
  * @author josue
  */
 public class Form extends javax.swing.JFrame {
-    ArrayList<String> variables = new ArrayList<String>();
+   
     public String Text;
     /**
      * Creates new form Form
@@ -84,22 +85,6 @@ public class Form extends javax.swing.JFrame {
         g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
     }
 }
-    public void encontrar_variables(Nodo nodo){
-        for(Nodo instruccion : nodo.hijos){
-            
-            if(instruccion.token == "INSTRUCCIONES"){
-                for(Nodo declaracion : instruccion.hijos){
-                    if(declaracion.token == "tk_cadena"){
-                        variables.add(declaracion.lexema);
-                    }
-                }
-            }
-            
-            if(instruccion.lexema == "" ){
-                encontrar_variables(instruccion);
-            }
-        }
-    }
     public  void setPyText(){
         translate_Python py = new translate_Python();
 //        py.makeFile();
@@ -390,13 +375,12 @@ public class Form extends javax.swing.JFrame {
             Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
         }   
         if(raiz != null){
-            variables.clear();
-            encontrar_variables(raiz); 
-            
+            Instruccion inst = new Instruccion();
+            inst.instrucciones(raiz);
             AST arbol = new AST(raiz);
             arbol.GraficarSintactico();
         }
-        JOptionPane.showMessageDialog(this.rootPane, "Proceso de compilacion DONE(:");
+//        JOptionPane.showMessageDialog(this.rootPane, "Proceso de compilacion DONE(:");
     }//GEN-LAST:event_btStartActionPerformed
 
     private void btPythonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPythonActionPerformed

@@ -8,6 +8,7 @@ import arbol.Imprimir;
 import arbol.Declarar;
 import arbol.Asignar;
 import arbol.If;
+import arbol.Para;
 
 parser code 
 {:
@@ -16,6 +17,7 @@ parser code
         public static Declarar declarar = new Declarar();
         public static Asignar asignar = new Asignar();
         public static If condicion = new If();
+        public static Para para = new Para();
         
         public Nodo getRaiz(){      
             return raiz;
@@ -99,7 +101,7 @@ DECLARA::= res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_NU
                                                                             padre.AddHijo(f);                                                        //agregamos como hijo el identificador de la cadena
                                                                             padre.AddHijo(new Nodo("tk_PTCOMA", ";", 0, 0));             //agregamos como hijo el signo ptcoma
                                                                             RESULT = padre;      
-                                                                            declarar.declarar(b,d,f);
+                                                                           
                                                                                     :}
         | res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_logica:f tk_PTCOMA:g {:
                                                                             Nodo padre = new Nodo("DECLARACION", "", 0,0);
@@ -110,7 +112,7 @@ DECLARA::= res_INGRESAR:a LISTID:b res_COMO:c TIPO:d res_CONVALOR:e EXPRESION_NU
                                                                             padre.AddHijo(new Nodo("res_CVALOR", e, eright, eleft));             
                                                                             padre.AddHijo(f);                                                 
                                                                             padre.AddHijo(new Nodo("tk_PTCOMA", ";", 0, 0));
-                                                                            declarar.declarar(b,d,f);
+                                                                            
                                                                             RESULT = padre;                                                                             
                                                                                     :}
 ;
@@ -132,7 +134,7 @@ CONDICION::= res_SI:a EXPRESION_logica:b res_ENTONCES:c  RECURSIVE_INST:d res_FI
                                                                                     padre.AddHijo(d); 
                                                                                     padre.AddHijo(new Nodo("res_FINSI", e, eright, eleft)); 
                                                                                     RESULT = padre;
-                                                                                    condicion.condicion(b,d);
+                                                                                    //condicion.condicion(b,d);
                                                                                      :}
            | res_SI:a EXPRESION_logica:b res_ENTONCES:c RECURSIVE_INST:d ELSEIF:e res_FINSI:f {: Nodo padre = new Nodo("CONDICION", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
                                                                                     padre.AddHijo(new Nodo("res_SI", a, aright, aleft)); 
@@ -235,7 +237,8 @@ FOR::= res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESI
                                                                                     padre.AddHijo(new Nodo("res_HACER", g, gright, gleft)); 
                                                                                     padre.AddHijo(h); 
                                                                                     padre.AddHijo(new Nodo("res_FINPARA", i, iright, ileft)); 
-                                                                                    RESULT = padre;  :}
+                                                                                    RESULT = padre; 
+                                                                                    para.para(b,d,f); :}
      | res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESION_NUM:f res_CONINCREM:g EXPRESION_NUM:h res_HACER:i RECURSIVE_INST:j res_FINPARA:z {: Nodo padre = new Nodo("FOR", "", 0,0);
                                                                                     padre.AddHijo(new Nodo("res_PARA", a, aright, aleft)); 
                                                                                     padre.AddHijo(b); 
@@ -408,12 +411,12 @@ PRINT::= res_IMPRIMIR:a  PRINT_:b tk_PTCOMA:c {:
 PRINT_::= tk_CADENA:a {:Nodo padre = new Nodo("E", "", 0,0);
                         padre.AddHijo(new Nodo("tk_CADENA", a, aright, aleft));
                         RESULT = padre;
-                        imprimir.print(a,true);
+                        //imprimir.print(a,true);
                         :}
         | IDENTIFICADOR:a {:Nodo padre = new Nodo("tk_CADENA", "", 0,0);
                             padre.AddHijo(new Nodo("ID", a, aright, aleft));
                             RESULT = padre;
-                            imprimir.print(a,false);
+                            //imprimir.print(a,false);
                              :}
         | tk_PARIZQ:a IDENTIFICADOR:b tk_PARDER:c {:Nodo padre = new Nodo("E", "", 0,0);
                                                     padre.AddHijo(new Nodo("tk_PARIZQ", a, aright, aleft));               
@@ -452,7 +455,7 @@ LISTID::= LISTID:a tk_COMA:b IDENTIFICADOR:c {:
                                      Nodo padre = new Nodo("LISTID", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
                                      padre.AddHijo(a); 
                                      padre.AddHijo (new Nodo("tk_PTCOMA", b, 0,0));
-                                     padre.AddHijo (new Nodo("id", c, 0,0));
+                                     padre.AddHijo (new Nodo("ID", c, 0,0));
                                      RESULT = padre;
                                         :}
         | IDENTIFICADOR:a {:
