@@ -5,6 +5,8 @@
  */
 package arbol;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author josue
@@ -15,37 +17,44 @@ public class Para {
     String exp="";
     String IDs="";
     boolean flag = false;
-
+//  --.-...----.-.-.--.-.
+    Nodo b;
+    Nodo d;
+    Nodo f;
+    String instruccionpy = "";
+    String instruccionGo = "";
     public Para() {
     }
 //    res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESION_NUM:f res_HACER:g RECURSIVE_INST:h res_FINPARA:i
-    public  void para(Nodo b,Nodo d,Nodo f){
-        py_For(b,d,f,"0");
-        go_For(b,d,f,"0");
+    public  ArrayList<String> para(){
+        ArrayList textos = new ArrayList();
+        textos.add( py_For(b,d,f,"0"));
+        textos.add(go_For(b,d,f,"0"));
+        return (textos);
     }
     
-    public void py_For(Nodo b,Nodo d,Nodo f,String i){
+    public String py_For(Nodo b,Nodo d,Nodo f,String i){
         String translate = "";
         String id = getIDs(b, i);
-        if(flag == true){
-            translate+="for i in "+id+" :\n        pass";
+        if(flag == false){
+            translate+="for i in "+id+" :\n        "+instruccionpy;
         }else{
             translate+="for i in range ("+id+") :\n        pass";
         }
         text = "";
         IDs = "";
-//        py.mText(translate);
+        return (translate);
     }
     
-    public void go_For(Nodo b,Nodo d,Nodo f,String i){
+    public String go_For(Nodo b,Nodo d,Nodo f,String i){
         String translate = "";
         String id = getIDs(b, i);
         String hasta = getExpression(d, i);
         String E = getGo(f,i);
-        translate+="for "+id+" := "+hasta+";"+E+"{\n }\n";
+        translate+="for "+id+" := "+hasta+";"+E+"{\n "+instruccionGo+" }\n";
         text = "";
         IDs = "";
-//        go.mText(translate);
+        return (translate);
     }
     
     public String getGo( Nodo nodo,String i){

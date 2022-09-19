@@ -12,9 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/Hasta.java</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/analizadores/A_sintactico.cup</file>
-            <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/Copia%20de%20archivoEntrada.olc</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/Para.java</file>
+            <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/entrada_anidado.olc</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/Asignar.java</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/PseudoParser/Form.java</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/entrada.olc</file>
@@ -26,6 +27,7 @@
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/Instruccion.java</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/Imprimir.java</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/analizadores/Analizador_sintactico.java</file>
+            <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/While.java</file>
         </group>
     </open-files>
 </project-private>

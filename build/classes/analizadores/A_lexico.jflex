@@ -80,7 +80,7 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 
 "para"          {System.out.println("Reconocio RES:PARA");return new Symbol(sym.res_PARA,yyline,yychar, yytext());} 
 "hasta"          {System.out.println("Reconocio RES:hasta");return new Symbol(sym.res_HASTA,yyline,yychar, yytext());} 
-"con_incremental"          {System.out.println("Reconocio RES:conINCRE");return new Symbol(sym.res_CONINCREM,yyline,yychar, yytext());} 
+"con incremental"          {System.out.println("Reconocio RES:conINCRE");return new Symbol(sym.res_CONINCREM,yyline,yychar, yytext());} 
 "fin_para"          {System.out.println("Reconocio RES:FINPARA");return new Symbol(sym.res_FINPARA,yyline,yychar, yytext());} 
 "mientras"          {System.out.println("Reconocio RES:WHILE"); return new Symbol(sym.res_MIENTRAS,yyline,yychar, yytext());} 
 "fin_mientras"          {return new Symbol(sym.res_FINMIENTRAS,yyline,yychar, yytext());} 

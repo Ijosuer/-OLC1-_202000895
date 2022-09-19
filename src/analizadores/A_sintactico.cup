@@ -75,8 +75,8 @@ RECURSIVE::=  RECURSIVE:a BEGIN:b {: Nodo padre = new Nodo("INSTRUCCIONES", "", 
                 | BEGIN:a         {: Nodo padre = new Nodo("INSTRUCCIONES", "", 0,0);             //creamos un nodo padre identificandolo con el nombre del no terminal del lado izq de la produccion
                                   padre.AddHijo(a); 
                                   RESULT = padre; :}
-                | error tk_PTCOMA:a  {: Nodo padre = new Nodo("", "", 0,0);:}
-                | error tk_ASIGNAFLECHA:a  {: Nodo padre = new Nodo("", "", 0,0);:}
+                | error tk_ASIGNAFLECHA
+                | error tk_PTCOMA
 ;
 
 BEGIN::= DECLARA:a {: RESULT=a; :}
@@ -122,8 +122,7 @@ ASIGNA::= LISTID:a tk_ASIGNAFLECHA:b EXPRESION_NUM:c tk_PTCOMA:d {: Nodo padre =
                                                                     padre.AddHijo(new Nodo("tk_FLECHA", b, bright, bleft)); 
                                                                     padre.AddHijo(c); 
                                                                     padre.AddHijo(new Nodo("tk_PTCOMA", d, dright, dleft)); 
-                                                                    RESULT = padre; 
-                                                                    asignar.asignar(a,c);:}
+                                                                    RESULT = padre; :}
 ;
 
 //---->CONDICIONES<----
@@ -237,8 +236,18 @@ FOR::= res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESI
                                                                                     padre.AddHijo(new Nodo("res_HACER", g, gright, gleft)); 
                                                                                     padre.AddHijo(h); 
                                                                                     padre.AddHijo(new Nodo("res_FINPARA", i, iright, ileft)); 
-                                                                                    RESULT = padre; 
-                                                                                    para.para(b,d,f); :}
+                                                                                    RESULT = padre;:} 
+     | res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESION_NUM:f res_HACER:g  res_FINPARA:i {: Nodo padre = new Nodo("FOR", "", 0,0);
+                                                                                    padre.AddHijo(new Nodo("res_PARA", a, aright, aleft)); 
+                                                                                    padre.AddHijo(b); 
+                                                                                    padre.AddHijo(new Nodo("tk_FLECHA", c, cright, cleft)); 
+                                                                                    padre.AddHijo(d); 
+                                                                                    padre.AddHijo(new Nodo("res_HASTA", e, eright, eleft)); 
+                                                                                    padre.AddHijo(f); 
+                                                                                    padre.AddHijo(new Nodo("res_HACER", g, gright, gleft)); 
+                                                                                    padre.AddHijo(new Nodo("RECURSIVE_INST", "", 0, 0)); 
+                                                                                    padre.AddHijo(new Nodo("res_FINPARA", i, iright, ileft)); 
+                                                                                    RESULT = padre; :}
      | res_PARA:a LISTID:b tk_ASIGNAFLECHA:c EXPRESION_NUM:d res_HASTA:e EXPRESION_NUM:f res_CONINCREM:g EXPRESION_NUM:h res_HACER:i RECURSIVE_INST:j res_FINPARA:z {: Nodo padre = new Nodo("FOR", "", 0,0);
                                                                                     padre.AddHijo(new Nodo("res_PARA", a, aright, aleft)); 
                                                                                     padre.AddHijo(b); 
@@ -265,6 +274,7 @@ WHILE::= res_MIENTRAS:a EXPRESION_logica:b res_HACER:c RECURSIVE_INST:d res_FINM
                                                                                     padre.AddHijo(new Nodo("res_WHILE", a, aright, aleft)); 
                                                                                     padre.AddHijo(b); 
                                                                                     padre.AddHijo(new Nodo("res_HACER", c, cright, cleft)); 
+                                                                                    padre.AddHijo(new Nodo("RECURSIVE_INST", "", 0, 0)); 
                                                                                     padre.AddHijo(new Nodo("res_FINWHILE", d, dright, dleft)); 
                                                                                     RESULT = padre;  :}
 ;
@@ -277,6 +287,7 @@ HASTA::= res_REPETIR:a  RECURSIVE_INST:b res_HASTAQ:c EXPRESION_logica:d {: Nodo
        | res_REPETIR:a   res_HASTAQ:b EXPRESION_logica:c {: Nodo padre = new Nodo("REPETIR", "", 0,0);
                                                             padre.AddHijo(new Nodo("res_REPETIR", a, aright, aleft)); 
                                                             padre.AddHijo(new Nodo("res_HASTA", b, bright, bleft)); 
+                                                            padre.AddHijo(new Nodo("RECURSIVE_INST", "", 0, 0)); 
                                                             padre.AddHijo(c);
                                                             RESULT = padre;  :}
 ;
@@ -413,7 +424,7 @@ PRINT_::= tk_CADENA:a {:Nodo padre = new Nodo("E", "", 0,0);
                         RESULT = padre;
                         //imprimir.print(a,true);
                         :}
-        | IDENTIFICADOR:a {:Nodo padre = new Nodo("tk_CADENA", "", 0,0);
+        | IDENTIFICADOR:a {:Nodo padre = new Nodo("E", "", 0,0);
                             padre.AddHijo(new Nodo("ID", a, aright, aleft));
                             RESULT = padre;
                             //imprimir.print(a,false);

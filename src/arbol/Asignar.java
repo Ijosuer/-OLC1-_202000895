@@ -6,6 +6,7 @@
 package arbol;
 import arbol.translate_Python;
 import arbol.translate_Go;
+import java.util.ArrayList;
 /**
  *
  * @author josue
@@ -21,9 +22,11 @@ public class Asignar {
     }
     
 //    LISTID:a tk_ASIGNAFLECHA:b EXPRESION_NUM:c tk_PTCOMA:d
-    public void asignar(){
-        py_Asignar(a,E);
-        go_Asignar(a,E);
+    public ArrayList<String> asignar(){
+        ArrayList textos = new ArrayList();
+        textos.add( py_Asignar(a,E));
+        textos.add( go_Asignar(a,E));
+        return (textos);
     }
     public String getExpression( Nodo nodo,String i){
         int k =0;
@@ -61,7 +64,7 @@ public class Asignar {
         return IDs;
     }
     
-    public void py_Asignar(Nodo a, Nodo E){
+    public String py_Asignar(Nodo a, Nodo E){
         String translate = "";
         String id = "";
         getExpression(E,"0");
@@ -80,15 +83,17 @@ public class Asignar {
         }
         IDs= "";
         text = "";
-        py.mText(translate);
+//        py.mText(translate);
+        return translate;
     }
     
-    public void go_Asignar(Nodo a, Nodo E){
+    public String go_Asignar(Nodo a, Nodo E){
         String translate = "";
         getExpression(E,"0");
         String id = a.hijos.get(0).lexema;
         translate = id+" = "+text+"\n";
         text = "";
-        go.mText(translate);
+//        go.mText(translate);
+        return translate;
     }
 }

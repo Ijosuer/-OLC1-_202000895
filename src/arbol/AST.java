@@ -35,6 +35,9 @@ public class AST {
     private String GraficaNodos(Nodo nodo, String i){
         int k=0; 
         String r = "";
+        if(nodo == null){
+            return "";
+        }
         String nodoTerm = nodo.token;
         nodoTerm = nodoTerm.replace("\"", "");
         r= "node" + i + "[label = \"" + nodoTerm + "\"];\n";

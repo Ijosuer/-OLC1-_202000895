@@ -117,11 +117,31 @@ Nodo b;Nodo tipo; Nodo E;
                     }
                 }
             }else{
-                if(text.equals("falso")){
+                    if(text.equals("falso")){
                             translate +=  id+" = False\n";
-                        }else{
+                        }else if(text.equals("verdadero")){
                             System.out.println(text);
                             translate += id+" = True \n";
+                        }else{
+                            if(text.contains("es_igual")){
+                            text = (text.replace("es_igual", "=="));
+                            translate +=id+" = "+text+"\n";
+                            }else if(text.contains("es_diferente")){
+                            text = (text.replace("es_diferente", "!="));
+                            translate +=id+" = "+text+"\n";
+                            }else if(text.contains("mayor_o_igual")){
+                            text = (text.replace("mayor_o_igual", ">="));
+                            translate +=id+" = "+text+"\n";
+                            }else if(text.contains("menor_o_igual")){
+                            text = (text.replace("menor_o_igual", "<="));
+                            translate +=id+" = "+text+"\n";
+                            }else if(text.contains("mayor")){
+                            text = (text.replace("mayor", ">"));
+                            translate +=id+" = "+text+"\n";
+                            }else if(text.contains("menor")){
+                            text = (text.replace("menor", "<"));
+                            translate +=id+" = "+text+"\n";
+                            }
                         }
             }
         }
@@ -136,23 +156,87 @@ Nodo b;Nodo tipo; Nodo E;
     
     public String go_Declarar(Nodo b, Nodo tipo, Nodo nodo, String i){
         String translate = "";
+        String id = "";
         getExpression(nodo,i);
-        String id = b.hijos.get(0).lexema;
+//        String id = b.hijos.get(0).lexema;
+        id = getIDs(b,i);
+        String[] var = id.split(",");
         String type = tipo.hijos.get(0).token;
         if(type == "res_NUM"){
-            translate = "var "+id+" = "+text+"\n";
-        }else if (type == "res_CADENA"){
-            translate = "var "+id+" = \""+text+"\"\n";
+//            translate = id+" = "+text+"\n";
+        if (var.length > 1){
+            for (String element : var) {
+                if(element == var[var.length-1]){
+                translate +="var "+element+" = "+text+"\n";
+                }else{
+                translate +="var "+ element+" = "+text+"\n    ";
+                }
+            }
         }else{
-            if(text.equals("falso")){
-                translate = "var "+id+" = false\n";
-            }else if (text.equals("verdadero")){
-                System.out.println(text);
-                translate = "var "+id+" = true \n";
+                translate += "var "+id+" = "+text+"\n";
+        }
+        }else if (type == "res_CADENA"){
+            if(var.length>1){
+                for (String element : var) {
+                    if(element == var[var.length-1]){
+                    translate += "var "+element+" = \""+text+"\"\n";
+                    }else{
+                    translate += "var "+element+" = \""+text+"\"\n    ";
+                    }
+                }   
+            }else{
+                    translate += "var "+id+" = \""+text+"\"\n";
+            }
+        }else{
+            if (var.length > 1){
+                for (String element : var) {
+                    if(element == var[var.length-1]){
+                        if(text.equals("falso")){
+                            translate +=  "var "+element+" = false\n";
+                        }else{
+                            System.out.println(text);
+                            translate += "var "+element+" = frue \n";
+                        }
+                    }else{
+                        if(text.equals("falso")){
+                            translate +=  "var "+element+" = false\n    ";
+                        }else{
+                            System.out.println(text);
+                            translate += "var "+element+" = true \n    "    ;
+                        }
+                    }
+                }
+            }else{
+                    if(text.equals("falso")){
+                            translate +="var"+ id+" = false\n";
+                        }else if(text.equals("verdadero")){
+                            translate +="var"+id+" = true \n";
+                        }else{
+                            if(text.contains("es_igual")){
+                            text = (text.replace("es_igual", "=="));
+                            translate +="var"+id+" = "+text+"\n";
+                            }else if(text.contains("es_diferente")){
+                            text = (text.replace("es_diferente", "!="));
+                            translate +="var"+id+" = "+text+"\n";
+                            }else if(text.contains("mayor_o_igual")){
+                            text = (text.replace("mayor_o_igual", ">="));
+                            translate +="var"+id+" = "+text+"\n";
+                            }else if(text.contains("menor_o_igual")){
+                            text = (text.replace("menor_o_igual", "<="));
+                            translate +="var"+id+" = "+text+"\n";
+                            }else if(text.contains("mayor")){
+                            text = (text.replace("mayor", ">"));
+                            translate +="var"+id+" = "+text+"\n";
+                            }else if(text.contains("menor")){
+                            text = (text.replace("menor", "<"));
+                            translate +="var"+id+" = "+text+"\n";
+                            }
+                        }
             }
         }
+        
         text = "";
-//        go.mText(translate);
+        IDs = "";
         return translate;
     }
 }
