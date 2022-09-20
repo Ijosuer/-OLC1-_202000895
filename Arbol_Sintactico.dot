@@ -1,4 +1,4 @@
-digraph AST{
+digraph asdfsadfasdfsdf{
 
 node0[label = "INICIO"];
 node0 -> node00
@@ -6,55 +6,21 @@ node00[label = "res_Inicio"];
 node0 -> node01
 node01[label = "INSTRUCCIONES"];
 node01 -> node010
-node010[label = "METODO"];
+node010[label = "PRINT"];
 node010 -> node0100
-node0100[label = "res_METODO"];
-node0100c[label = "metodo"];
+node0100[label = "res_PRINT"];
+node0100c[label = "imprimir"];
 node0100 -> node0100c
 node010 -> node0101
-node0101[label = "ID"];
-node0101c[label = "_metodo_1_"];
-node0101 -> node0101c
+node0101[label = "E"];
+node0101 -> node01010
+node01010[label = "ID"];
+node01010c[label = "_acumulado_"];
+node01010 -> node01010c
 node010 -> node0102
-node0102[label = "RECURSIVE_INST"];
-node0102 -> node01020
-node01020[label = "PRINTLN"];
-node01020 -> node010200
-node010200[label = "res_PRINTNL"];
-node010200c[label = "imprimir_nl"];
-node010200 -> node010200c
-node01020 -> node010201
-node010201[label = "E"];
-node010201 -> node0102010
-node0102010[label = "tk_CADENA"];
-node0102010c[label = "estamos entrando al metodo 1"];
-node0102010 -> node0102010c
-node01020 -> node010202
-node010202[label = "tk_PTCOMA"];
-node010202c[label = ";"];
-node010202 -> node010202c
-node0102 -> node01021
-node01021[label = "RECURSIVE_INST"];
-node01021 -> node010210
-node010210[label = "PRINTLN"];
-node010210 -> node0102100
-node0102100[label = "res_PRINTNL"];
-node0102100c[label = "imprimir_nl"];
-node0102100 -> node0102100c
-node010210 -> node0102101
-node0102101[label = "E"];
-node0102101 -> node01021010
-node01021010[label = "tk_CADENA"];
-node01021010c[label = " Esta es la potencia Funcion"];
-node01021010 -> node01021010c
-node010210 -> node0102102
-node0102102[label = "tk_PTCOMA"];
-node0102102c[label = ";"];
-node0102102 -> node0102102c
-node010 -> node0103
-node0103[label = "res_FINMETODO"];
-node0103c[label = "fin_metodo"];
-node0103 -> node0103c
+node0102[label = "tk_PTCOMA"];
+node0102c[label = ";"];
+node0102 -> node0102c
 node0 -> node02
 node02[label = "res_FIN"];
 

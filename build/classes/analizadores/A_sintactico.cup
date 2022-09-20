@@ -88,6 +88,7 @@ BEGIN::= DECLARA:a {: RESULT=a; :}
        | HASTA:a {: RESULT=a; :}                        
        | METODO:a {: RESULT=a; :}
        | FUNCION:a {: RESULT=a; :}
+       | EJECUTAR:a {: RESULT=a; :}
        | PRINT:a {: RESULT=a; :}// retornamos el nodo que viene ya creado de declaracion
 ;
 
@@ -593,7 +594,6 @@ INSTRUCCIONES::= DECLARA:a {: RESULT=a; :}
                | FOR:a {: RESULT=a; :}
                | WHILE:a {: RESULT=a; :}
                | HASTA:a {: RESULT=a; :}
-               | EJECUTAR:a {: RESULT=a; :}
                | PRINT:a {:imprimir.returnPrint();   RESULT=a; :}
 ;
 

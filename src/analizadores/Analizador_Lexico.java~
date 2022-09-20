@@ -2,6 +2,7 @@
 
 package analizadores;
 import java_cup.runtime.*;
+import arbol.Errores;
 
 
 /**
@@ -381,8 +382,7 @@ public class Analizador_Lexico implements java_cup.runtime.Scanner {
 
   /* user code: */
     //----> Codigo de usuario en sintaxis java
-import arbol.Error;
-Error error = new Error("", "", 0, 0);
+Errores error = new Errores("", "", 0, 0);
 
 
 

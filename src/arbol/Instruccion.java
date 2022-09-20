@@ -30,6 +30,7 @@ public class Instruccion {
      Hasta repetir = new Hasta();
      Funcion funcion = new Funcion();
      Metodo metodo = new Metodo();
+     Ejecutar ejecutar = new Ejecutar();
 //     *******************************
      int i = 0;
      Nodo aux;
@@ -50,7 +51,7 @@ public class Instruccion {
                         
 //                    IF
                     if(i.token.equals("CONDICION")){
-                        System.out.println("VIENE IF");
+//                        System.out.println("VIENE IF");
                         for (Nodo inside : i.hijos) {
                             if(inside.token.equals("E")){
                                     condi.b = inside;
@@ -128,6 +129,25 @@ public class Instruccion {
                                     texto_go = textos.get(1).toString();
                                     py.funcionTxt = texto_py;
                                     go.funcionesTxt = texto_go;
+                            }  
+                        }
+//                        EEJCUTAR
+                    }else if(i.token.equals("EJECUTAR")){
+                        for (Nodo inside : i.hijos) {
+                            if(inside.token.equals("ID")){
+                                    ejecutar.b = inside;
+                            }else if(inside.token.equals("LISTP")){
+                                    ejecutar.listp = inside;
+                                    recursive_instruction(inside);
+                                    ejecutar.instruccionGo = recursivo_go;
+                                    ejecutar.instruccionpy = recursivo_py;
+                                    recursivo_go = "";
+                                    recursivo_py = "";
+                                    textos = ejecutar.ejecutar();
+                                    texto_py = textos.get(0).toString();
+                                    texto_go = textos.get(1).toString();
+                                    py.mText(texto_py); 
+                                    go.mText(texto_go);
                             }  
                         }
 //                    PARA
@@ -230,7 +250,7 @@ public class Instruccion {
 //                        System.out.println(iterator);
 //                        System.out.println(i);
                         if(iterator == i ){
-                            System.out.println("entra break");
+//                            System.out.println("entra break");
                             break;
                         }
                         tmp = i;
@@ -259,7 +279,7 @@ public class Instruccion {
                         }
 //                        DECLARAR
                     }else if(i.token.equals("DECLARACION")){
-                        System.out.println(i);
+//                        System.out.println(i);
                         for (Nodo inside : i.hijos) {
                             if(inside.token.equals("LISTID")){
                                  declarar.b = inside;
@@ -308,8 +328,12 @@ public class Instruccion {
                     if(i.token.equals("E")){
                         for (Nodo inside : i.hijos) {
                             if(inside.token.equals("tk_CADENA")){
-                                System.out.println(inside.lexema);
+//                                System.out.println(inside.lexema);
                                 textos = prin.print(inside.lexema, true);
+                                recursivo_py += textos.get(0).toString();
+                                recursivo_go += textos.get(1).toString();
+                            }else{
+                                textos = prin.print(inside.lexema, false);
                                 recursivo_py += textos.get(0).toString();
                                 recursivo_go += textos.get(1).toString();
                             }  
@@ -347,7 +371,7 @@ public class Instruccion {
                     for (Nodo inside : instruccion.hijos) {
                         if(inside.token.equals("E")){
                                 condi.b = inside;
-                                System.out.println("res_SI");
+//                                System.out.println("res_SI");
                             }else if(inside.token.equals("RECURSIVE_INST")){
                                 condi.anteriores_go= recursivo_go;
                                 condi.anterior_py = recursivo_py;
@@ -391,6 +415,31 @@ public class Instruccion {
                                     para.instruccionGo = recursivo_go;
                                     para.instruccionpy = recursivo_py;
                                     textos = para.para();
+                                    texto_py = textos.get(0).toString();
+                                    texto_go = textos.get(1).toString();
+                                    recursivo_go = texto_go;
+                                    recursivo_py = texto_py;
+                                }
+                        }
+                    }
+            }else if(instruccion.token.equals("WHILE")){
+                    for (Nodo inside : instruccion.hijos) {
+                             if(inside.token.equals("E")){
+                                 mientras.b = inside;
+                            }else if(inside.token.equals("RECURSIVE_INST")){
+                                if(inside.hijos.isEmpty()){
+                                    mientras.instrucciongo = "// null";
+                                    mientras.instruccionpy = "# null\n    ";
+                                    textos = mientras.mientras();
+                                    texto_py = textos.get(0).toString();
+                                    texto_go = textos.get(1).toString();
+                                    recursivo_go = texto_go;
+                                    recursivo_py = texto_py;
+                                }else{
+                                recursive_instruction(inside);
+                                    mientras.instrucciongo = recursivo_go;
+                                    mientras.instruccionpy = recursivo_py;
+                                    textos = mientras.mientras();
                                     texto_py = textos.get(0).toString();
                                     texto_go = textos.get(1).toString();
                                     recursivo_go = texto_go;

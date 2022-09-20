@@ -13,8 +13,6 @@ import java.util.ArrayList;
  */
 
 public class Asignar {
-    public translate_Python py = new translate_Python();
-    public translate_Go go = new translate_Go();
     String text="";
     String IDs="";
     Nodo a;Nodo E;
@@ -83,17 +81,27 @@ public class Asignar {
         }
         IDs= "";
         text = "";
-//        py.mText(translate);
         return translate;
     }
     
     public String go_Asignar(Nodo a, Nodo E){
         String translate = "";
         getExpression(E,"0");
-        String id = a.hijos.get(0).lexema;
-        translate = id+" = "+text+"\n";
+        String id = getIDs(a, "0");
+        String [] var = id.split(",");
+        if(var.length > 1){
+            for (String element : var) {
+                if(element == var[var.length-1]){
+                    translate = element+" = "+text+"\n";
+                }else{
+                    translate = element+" = "+text+"\n";
+                }
+            }
+        }else{
+            translate += id+" = "+text+"\n";
+        }
+        IDs = "";
         text = "";
-//        go.mText(translate);
         return translate;
     }
 }

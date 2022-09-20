@@ -24,7 +24,7 @@ public class translate_Go {
     }
     
     public void mText(String txt){
-        System.out.println(txt);
+//        System.out.println(txt);
         code_text += txt;
     }
     

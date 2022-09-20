@@ -35,7 +35,7 @@ public class While {
         idk = getExpression(b, "0");
         String logico = getlogic(idk);
         translate = "while (";
-        translate+= logico+"):\n        "+d+"\n     ";
+        translate+= logico+"):\n            "+d+"\n     ";
        text="";
        return translate;
    }

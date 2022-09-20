@@ -19,6 +19,7 @@ public class Errores {
     public int linea;
     public int column;
     public static LinkedList<Errores> listaErrores = new LinkedList<>();
+    public static LinkedList<Errores> listaSintacticos = new LinkedList<>();
     
     public Errores(String token, String lexema, int linea, int column){
        this.token = token;
@@ -29,7 +30,10 @@ public class Errores {
     public static void addError(String token, String lexema, int linea, int column){
         listaErrores.add(new Errores(token,lexema,linea,column));
     }
-     public static void makeHTML(){
+    public static void addErrorSintacticos(String token, String lexema, int linea, int column){
+        listaErrores.add(new Errores(token,lexema,linea,column));
+    }
+    public static void makeHTML(){
         String html = "<!DOCTYPE html>\n" +
 "        <html lang=\"en\">\n" +
 "        <head>\n" +

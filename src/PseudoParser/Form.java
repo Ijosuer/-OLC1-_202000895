@@ -303,7 +303,7 @@ public class Form extends javax.swing.JFrame {
         navBar.add(jMenu1);
 
         jMenu2.setBackground(new java.awt.Color(102, 102, 0));
-        jMenu2.setText("Edit");
+        jMenu2.setText("Report");
         jMenu2.setPreferredSize(new java.awt.Dimension(60, 30));
 
         jMenuItem3.setBackground(new java.awt.Color(255, 153, 51));
@@ -332,10 +332,20 @@ public class Form extends javax.swing.JFrame {
 
         jMenuItem5.setBackground(new java.awt.Color(255, 153, 51));
         jMenuItem5.setText("User Manual");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem5);
 
         jMenuItem6.setBackground(new java.awt.Color(255, 153, 51));
         jMenuItem6.setText("Technical Manual");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem6);
 
         navBar.add(jMenu3);
@@ -449,6 +459,24 @@ public class Form extends javax.swing.JFrame {
             Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        String file_get_path = "C:\\Users\\josue\\Documents\\NetBeansProjects\\OLC1_Proyecto1\\Manual_Tecnico.pdf" ;
+        try {
+            Desktop.getDesktop().open(new File(file_get_path));
+        } catch (IOException ex) {
+            Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        String file_get_path = "C:\\Users\\josue\\Documents\\NetBeansProjects\\OLC1_Proyecto1\\Manual_Usuario.pdf" ;
+        try {
+            Desktop.getDesktop().open(new File(file_get_path));
+        } catch (IOException ex) {
+            Logger.getLogger(Form.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -120,17 +120,11 @@ COMENTMULTILINEA    =   "/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 "+" {System.out.println("Reconocio token:<tk_MAS>lexema:"+yytext());return new Symbol(sym.tk_MAS,yyline,yychar, yytext());} 
 "-" {System.out.println("Reconocio token:<tk_MENOS>lexema:"+yytext());return new Symbol(sym.tk_MENOS,yyline,yychar, yytext());}  
 "*" {System.out.println("Reconocio token:<tk_POR>lexema:"+yytext());return new Symbol(sym.tk_POR,yyline,yychar, yytext());} 
-"/" {System.out.println("Reconocio token:<tk_DIVIDIR>lexema:"+yytext());return new Symbol(sym.tk_DIVIDIDO,yyline,yychar, yytext());} 
-"=" {System.out.println("Reconocio token:<tk_IGUAL>lexema:"+yytext());return new Symbol(sym.tk_IGUAL,yyline,yychar, yytext());} 
+"/" {System.out.println("Reconocio token:<tk_DIVIDIR>lexema:"+yytext());return new Symbol(sym.tk_DIVIDIDO,yyline,yychar, yytext());}
 {ASKC} {System.out.println("Reconocio token:<tk_ASKA>lexema:"+yytext());return new Symbol(sym.tk_ASKA,yyline,yychar, yytext());} 
 "?" {System.out.println("Reconocio token:<tk_ASKC>lexema:"+yytext());return new Symbol(sym.tk_ASKC,yyline,yychar, yytext());} 
 "[" {System.out.println("Reconocio token:<tk_CORCHIZQ>lexema:"+yytext());return new Symbol(sym.tk_CORCHIZQ,yyline,yychar, yytext());} 
 "]" {System.out.println("Reconocio token:<tk_CORCHDER>lexema:"+yytext());return new Symbol(sym.tk_CORCHDER,yyline,yychar, yytext());} 
-
-
-"++" {System.out.println("Reconocio token:<tk_MASMAS>lexema:"+yytext());return new Symbol(sym.tk_INCREMENTO,yyline,yychar, yytext());} 
-"--" {System.out.println("Reconocio token:<tk_MENOSMENOS>lexema:"+yytext());return new Symbol(sym.tk_DECREMENTO,yyline,yychar, yytext());} 
-
 
 "->" {System.out.println("Reconocio token:<tk_ASIGFLECHA>lexema:"+yytext());return new Symbol(sym.tk_ASIGNAFLECHA,yyline,yychar, yytext());} 
 
