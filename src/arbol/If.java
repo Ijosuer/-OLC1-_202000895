@@ -64,42 +64,40 @@ public class If {
     }
     public String py_If(Nodo b, String d){
         String translate = ""; 
-        String idk = ""; 
-        idk = getExpression(b, "0");
-//        String[] condi = idk.split(",");
-//        
-////        String inst = getcondition(d, "0");
-//        
-//        String var1 =condi[0];
-//        String condicion =condi[1];
-//        String var2 =condi[2];
-//        text = "";
-//        translate = "if ";
-//        if(condicion.equals("mayor")){
-//            translate+=var1+" > "+var2+":\n        "
-//                    +"\n        "+d+"\n    ";return translate;
-//        }else if(condicion.equals("menor")){
-//            translate+=var1+" < "+var2+":\n        "
-//                    +"\n        "+d+"\n    ";return translate;
-//        }else if(condicion.equals("es_igual")){
-//            translate+=var1+" == "+var2+":\n        "
-//                    +"\n        "+d+"    ";return translate;
-//        }else if(condicion.equals("menor_o_igual")){
-//            translate+=var1+" <= "+var2+":\n        "
-//                    +"\n        "+d+"\n    ";return translate;
-//        }else if(condicion.equals("mayor_o_igual")){
-//            translate+=var1+" >= "+var2+":\n        "
-//                    +"\n        "+d+"\n    ";
-//        }else if(condicion.equals("es_diferente")){
-//            translate+=var1+" != "+var2+":\n        "
-//                    +"\n        "+d+"\n    ";
-//        }else if(condicion.equals("")){
-//            translate+=var1+":\n        "
-//                    +"\n        "+d+"\n    ";
-//        }
+        String condicion = ""; 
+        String texto = getExpression(b, "0");
+        
+        translate =anterior_py+ "\n    if ";
+        if(texto.contains("menor_o_igual")){
+             condicion = (texto.replace("menor_o_igual", "<="));
+            translate+=condicion+":\n        "
+                    +" "+d+"\n    ";
+        }else if(texto.contains("mayor_o_igual")){
+             condicion = (texto.replace("mayor_o_igual", ">="));
+            translate+=condicion+":\n        "
+                    +" "+d+"\n    ";
+        }else if(texto.contains("mayor")){
+             condicion = (texto.replace("mayor", ">"));
+            translate+=condicion+":\n        "
+                    +" "+d+"\n    ";
+        }else if(texto.contains("menor")){
+             condicion = (texto.replace("menor", "<"));
+            translate+=condicion+":\n        "
+                    +" "+d+"\n    ";
+        }else if(texto.contains("es_igual")){
+             condicion = (texto.replace("es_igual", "=="));
+            translate+=condicion+":\n        "
+                    +" "+d+"\n    ";
+        }else if(texto.contains("es_diferente")){
+             condicion = (texto.replace("es_diferente", "!="));
+            translate+=condicion+":\n        "
+                    +" "+d+"\n    ";
+        }else if(texto.equals("")){
+            translate+=texto+":\n        "
+                    +" "+d+"\n    ";
+        }
         IDs= "";
         text = "";
-//        py.mText(translate);
         return translate;
     }
     public String go_If(Nodo b,String d){
@@ -108,7 +106,7 @@ public class If {
         String texto = getExpression(b, "0");
 //        String inst = getcondition(d, "0");
 //        System.out.println(anteriores_go);
-        translate =anteriores_go+ "\n    if ";
+        translate =anteriores_go+ "\nif ";
         if(texto.contains("menor_o_igual")){
              condicion = (texto.replace("menor_o_igual", "<="));
             translate+=condicion+"{\n        "

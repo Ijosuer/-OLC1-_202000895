@@ -213,7 +213,7 @@ Nodo b;Nodo tipo; Nodo E;
                             translate +="var"+id+" = true \n";
                         }else{
                             if(text.contains("es_igual")){
-                            text = (text.replace("es_igual", "=="));
+                                text = (text.replace("es_igual", "=="));
                             translate +="var"+id+" = "+text+"\n";
                             }else if(text.contains("es_diferente")){
                             text = (text.replace("es_diferente", "!="));

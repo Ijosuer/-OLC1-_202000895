@@ -18,16 +18,18 @@ public class translate_Go {
             + "func main(){\n";
     public static String code_text="";
     public static String lastText = "}\n";
+    public static String funcionesTxt = "";
 
     public translate_Go() {
     }
     
     public void mText(String txt){
+        System.out.println(txt);
         code_text += txt;
     }
     
     public void fText(){
-        mainText += code_text+lastText;
+        mainText += code_text+lastText+funcionesTxt;
     }
     
     public void clean(){
@@ -35,5 +37,6 @@ public class translate_Go {
             + "import \"fmt\"\n\n"
             + "func main(){\n";
         code_text ="";
+        funcionesTxt = "";
     }
 }

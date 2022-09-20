@@ -51,7 +51,8 @@ public class Para {
         String id = getIDs(b, i);
         String hasta = getExpression(d, i);
         String E = getGo(f,i);
-        translate+="for "+id+" := "+hasta+";"+E+"{\n "+instruccionGo+" }\n";
+        String logic = getlogic(E);
+        translate+="for "+id+" := "+hasta+";"+logic+";"+id+"++{\n "+instruccionGo+" }\n";
         text = "";
         IDs = "";
         return (translate);
@@ -68,9 +69,35 @@ public class Para {
                 String nodoToken = nodo.lexema; 
                 nodoToken = nodoToken.replace("\"", "");
                 exp = exp.replace("\n", " ");
-                exp+=nodoToken;
+                exp+=nodoToken+" ";
         }
         return exp;
+    }
+    public String getlogic(String texto){
+        String condicion = "";
+        if(texto.contains("menor_o_igual")){
+             condicion = (texto.replace("menor_o_igual", "<="));
+             return condicion;
+        }else if(texto.contains("mayor_o_igual")){
+             condicion = (texto.replace("mayor_o_igual", ">="));
+             return condicion;
+        }else if(texto.contains("mayor")){
+             condicion = (texto.replace("mayor", ">"));
+             return condicion;
+        }else if(texto.contains("menor")){
+             condicion = (texto.replace("menor", "<"));
+             return condicion;
+        }else if(texto.contains("es_igual")){
+             condicion = (texto.replace("es_igual", "=="));
+             return condicion;
+        }else if(texto.contains("es_diferente")){
+             condicion = (texto.replace("es_diferente", "!="));
+             return condicion;
+        }else if(texto.equals("")){
+             return condicion;
+            
+        }
+        return condicion;
     }
     public String getExpression( Nodo nodo,String i){
         int k =0;

@@ -28,9 +28,13 @@ public class Instruccion {
      Para para = new Para();
      While mientras = new While();
      Hasta repetir = new Hasta();
+     Funcion funcion = new Funcion();
+     Metodo metodo = new Metodo();
 //     *******************************
      int i = 0;
      Nodo aux;
+     Nodo iterator;
+     Nodo tmp;
 //     -------------------------
      String recursivo_py = "";
      String recursivo_go = "";
@@ -55,6 +59,7 @@ public class Instruccion {
                             }else if(inside.token.equals("RECURSIVE_INST")){
                                     recursive_instruction(inside);
                                     condi.anteriores_go = "";
+                                    condi.anterior_py = "";
                                     condi.instruccionGo = recursivo_go;
                                     condi.instruccionpy = recursivo_py;
                                     recursivo_go = "";
@@ -67,9 +72,66 @@ public class Instruccion {
                                     go.mText(texto_go);
                             }  
                         }
-                    }
+//                    FUNCION
+                    }else if(i.token.equals("FUNCION")){
+                        for (Nodo inside : i.hijos) {
+                            if(inside.token.equals("ID")){
+                                    funcion.b = inside;
+                            }else if(inside.token.equals("LISTP")){
+                                    funcion.listp = inside;
+                            }else if(inside.token.equals("TIPO")){
+                                    for (Nodo hijo : inside.hijos) {
+                                        if(hijo.token.equals("res_NUM")){
+                                            funcion.tipo = " int ";
+                                        }else if(hijo.token.equals("res_CADENA")){
+                                            funcion.tipo = " string ";
+                                        }else if(hijo.token.equals("res_BOOLEAN")){
+                                            funcion.tipo = " boolean ";
+                                        }else{
+                                            funcion.tipo = " char ";
+                                        }
+                                }
+                            }else if(inside.token.equals("RECURSIVE_INST")){
+                                    recursive_instruction(inside);
+                                    funcion.instruccionGo = recursivo_go;
+                                    funcion.instruccionpy = recursivo_py;
+                                    recursivo_go = "";
+                                    recursivo_py = "";
+                            }else if(inside.token.equals("RETURN")){
+                                    for (Nodo retorno : inside.hijos) {
+                                        if (retorno.token.equals("E")){
+                                        funcion.reto = retorno;
+                                        }
+                                    }
+                                    textos = funcion.funcion();
+                                    texto_py = textos.get(0).toString();
+                                    texto_go = textos.get(1).toString();
+                                    py.funcionTxt = texto_py;
+                                    go.funcionesTxt = texto_go;
+                            }  
+                        }
+//                    METODO
+                    }else if(i.token.equals("METODO")){
+                        for (Nodo inside : i.hijos) {
+                            if(inside.token.equals("ID")){
+                                    metodo.b = inside;
+                            }else if(inside.token.equals("LISTP")){
+                                    metodo.listp = inside;
+                            }else if(inside.token.equals("RECURSIVE_INST")){
+                                    recursive_instruction(inside);
+                                    metodo.instruccionGo = recursivo_go;
+                                    metodo.instruccionpy = recursivo_py;
+                                    recursivo_go = "";
+                                    recursivo_py = "";
+                                    textos = metodo.metodo();
+                                    texto_py = textos.get(0).toString();
+                                    texto_go = textos.get(1).toString();
+                                    py.funcionTxt = texto_py;
+                                    go.funcionesTxt = texto_go;
+                            }  
+                        }
 //                    PARA
-                    if(i.token.equals("FOR")){
+                    }else if(i.token.equals("FOR")){
                         for (Nodo inside : i.hijos) {
                             if(inside.token.equals("LISTID")){
                                     para.b = inside;
@@ -107,9 +169,8 @@ public class Instruccion {
                                 }
                             }  
                         }
-                    }
+                    }else if(i.token.equals("WHILE")){
 //                    WHILE
-                    if(i.token.equals("WHILE")){
                         for (Nodo inside : i.hijos) {
                             if(inside.token.equals("E")){
                                     mientras.b = inside;
@@ -138,9 +199,8 @@ public class Instruccion {
                                 }
                             }  
                         }
-                    }
+                    }else if(i.token.equals("REPETIR")){
 //                    DO WHILE
-                    if(i.token.equals("REPETIR")){
                         for (Nodo inside : i.hijos) {
                             if(inside.token.equals("E")){
                                     repetir.b = inside;
@@ -167,6 +227,14 @@ public class Instruccion {
                         }
                     }
                     else  if(i.token.equals("PRINTLN") || i.token.equals("PRINT")){
+//                        System.out.println(iterator);
+//                        System.out.println(i);
+                        if(iterator == i ){
+                            System.out.println("entra break");
+                            break;
+                        }
+                        tmp = i;
+                        iterator = i;
                         for (Nodo inside : i.hijos) {
                             if(inside.token.equals("E")){
                                 for (Nodo j : inside.hijos) {
@@ -182,6 +250,8 @@ public class Instruccion {
                                         texto_go = textos.get(1).toString();
                                         py.mText(texto_py);
                                         go.mText(texto_go);
+                                        texto_go = "";
+                                        texto_py = "";
                                         
                                     }
                                 }
@@ -189,7 +259,7 @@ public class Instruccion {
                         }
 //                        DECLARAR
                     }else if(i.token.equals("DECLARACION")){
-                        System.out.println("DECLARA");
+                        System.out.println(i);
                         for (Nodo inside : i.hijos) {
                             if(inside.token.equals("LISTID")){
                                  declarar.b = inside;
@@ -240,8 +310,8 @@ public class Instruccion {
                             if(inside.token.equals("tk_CADENA")){
                                 System.out.println(inside.lexema);
                                 textos = prin.print(inside.lexema, true);
-                                recursivo_py = textos.get(0).toString();
-                                recursivo_go = textos.get(1).toString();
+                                recursivo_py += textos.get(0).toString();
+                                recursivo_go += textos.get(1).toString();
                             }  
                         }
                     }
@@ -279,7 +349,8 @@ public class Instruccion {
                                 condi.b = inside;
                                 System.out.println("res_SI");
                             }else if(inside.token.equals("RECURSIVE_INST")){
-                                condi.anteriores_go = recursivo_go;
+                                condi.anteriores_go= recursivo_go;
+                                condi.anterior_py = recursivo_py;
                                 recursive_instruction(inside);
 //                                condi.d = recursivo;
                                     condi.instruccionGo = recursivo_go;

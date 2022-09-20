@@ -87,9 +87,7 @@ public class Form extends javax.swing.JFrame {
 }
     public  void setPyText(){
         translate_Python py = new translate_Python();
-//        py.makeFile();
-//        System.out.println(str);
-        textArea2.setText(py.mainText+py.mainlastText);
+        textArea2.setText(py.ftext());
         py.clean();
     }
     public void setGoText(){

@@ -5,7 +5,7 @@
             <url>src/arbol/AST.java</url>
             <bookmark id="1">
                 <name/>
-                <line>41</line>
+                <line>44</line>
                 <key/>
             </bookmark>
         </file>
@@ -14,7 +14,9 @@
         <group>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/Hasta.java</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/analizadores/A_sintactico.cup</file>
+            <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/Copia%20de%20archivoEntrada.olc</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/Para.java</file>
+            <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/translate_Go.java</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/entrada_anidado.olc</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/arbol/Asignar.java</file>
             <file>file:/C:/Users/josue/Documents/NetBeansProjects/OLC1_Proyecto1/src/PseudoParser/Form.java</file>
