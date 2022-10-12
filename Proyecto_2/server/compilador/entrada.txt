@@ -1,0 +1,27 @@
+
+/*  SALIDA ESPERADA:
+            ========= Metodo Declaracion =========
+            Voy a ganar Compiladores 1 :D
+            ======================================
+Evaluar[1/1 + 1 - 1];
+Evaluar[1+1*2];
+Evaluar[-(1+1*6/3-5+7)];
+Evaluar[-(1+1*6/3-5+1*-2)];
+Evaluar[-(2)*5 +10];
+Evaluar [-5*(-1)];
+Evaluar [5^3];
+Evaluar[-(1.6+1.45)];
+Evaluar [7%5];
+    
+    */
+
+Imprimir "hi";
+
+//INt hola,adiosxd;
+
+INt hola,bai,again = 5;
+celular = true;
+boolean flag_personalizada;
+string curso_ = "organización de compiladores 1 2022";
+hola++;
+adiosxd--;
