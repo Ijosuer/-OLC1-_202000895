@@ -1,4 +1,25 @@
-<p>dashboard works!</p>
-
-<button id="action" (click) = getdata()>get data</button>
-<button id="action" (click) = setdata()>set data!</button>
+<!-- <p>dashboard works!</p> -->
+<!-- <button id="action" (click) = getdata()>get data</button>
+<button id="action" (click) = setdata()>set data!</button> -->
+<div class="album py-5 bg-dark fondo">
+  <div class="container">
+      <div class="">
+          <div class="col-md-12 align-items-left">
+              <form action="/verXML/" method="GET">
+                  <!-- <button type="submit" class="btn btn-primary">Consultar datos</button> -->
+              </form> 
+              <div class="mydiv">
+                  <div class="col">
+                      <h4 ><i class="fa fa-code"></i> CODIGO</h4>
+                      <textarea id="meteme" rows="25" cols="50" ></textarea>
+                  </div>
+                  <div class="col">
+                      <h4><i class="fa fa-terminal"></i>  SALIDA</h4>
+                      <textarea id="enviame" rows="25" cols="50" readonly></textarea>
+                  </div>
+                 
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
