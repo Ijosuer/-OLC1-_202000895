@@ -7,4 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'MFMScript';
+  fileToUpload: File | null = null;
+  
+  callme(){
+    console.log('')
+  }
+  handleFileInput(files: FileList) {
+    console.log('simopn pa entraaa')
+    this.fileToUpload = files.item(0);
+  }
 }
