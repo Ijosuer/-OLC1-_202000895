@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
+// import { EditorComponent,MonacoEditorModule } from 'ngx-monaco-editor';
+import { FormControl } from '@angular/forms';
+import { filter, take } from 'rxjs/operators';
+import {MonacoEditorComponent,MonacoEditorConstructionOptions,MonacoEditorLoaderService,MonacoStandaloneCodeEditor} from '@materia-ui/ngx-monaco-editor';
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -8,28 +14,92 @@ import { UserService } from 'src/app/services/user.service';
 
 export class DashboardComponent implements OnInit {
   
-  constructor(private service:UserService) { }
+  opciones: string[]=[];
+
+  @ViewChild(MonacoEditorComponent, { static: false })
+  monacoComponent: MonacoEditorComponent = new MonacoEditorComponent(this.monacoLoaderService);
+  editorOptions: MonacoEditorConstructionOptions = {
+    // theme: 'myCustomTheme',
+    language: 'python',
+    roundedSelection: true,
+    autoIndent:"full"
+  };
+  consoleOptions: MonacoEditorConstructionOptions = {
+    // theme: 'myCustomTheme',
+    language: '',
+    roundedSelection: true,
+    autoIndent:"full",
+    readOnly:true
+  };
+  editorTexto = new FormControl('');
+  consola = new FormControl('');
+  constructor(private monacoLoaderService: MonacoEditorLoaderService, private service: UserService) {
+    this.monacoLoaderService.isMonacoLoaded$
+      .pipe(
+        filter(isLoaded => isLoaded),
+        take(1)
+      )
+      .subscribe(() => {
+        monaco.editor.defineTheme('myCustomTheme', {
+          base: 'vs-dark', // can also be vs or hc-black
+          inherit: true, // can also be false to completely replace the builtin rules
+          rules: [
+            {
+              token: 'comment',
+              foreground: 'ffa500',
+              fontStyle: 'italic underline'
+            },
+            { token: 'comment.js', foreground: '008800', fontStyle: 'bold' },
+            { token: 'comment.css', foreground: '0000ff' } // will inherit fontStyle from `comment` above
+          ],
+          colors: {}
+        });
+      });
+  }
+
+  editorInit(editor: MonacoStandaloneCodeEditor) {
+    monaco.editor.setTheme('vs-dark');
+    editor.setSelection({
+      startLineNumber: 1,
+      startColumn: 1,
+      endColumn: 50,
+      endLineNumber: 3
+    });
+  }
+
   ngOnInit(): void {
   }
 
-  
+  readFile(event:any){
+  let textArea = document.getElementById('meteme') as HTMLInputElement;
+  let input=event.target;
+  let reader = new FileReader();
+  reader.onload=()=>{
+    var text=reader.result;
+    if(text){
+      textArea.value = text.toString();
+    }
+
+  }
+  reader.readAsText(input.files[0]);
+
+  }
+
   getdata(){
     
     let textArea = document.getElementById('meteme') as HTMLInputElement;
     let inputfile = document.getElementById('file') as HTMLInputElement;
-    let file = (inputfile.files?.item(0))
-    console.log(file?.name)
-    let reader = new FileReader();
     let texto = "";
+    let reader = new FileReader();
     // reader.readAsText(file,"utf-8");
     reader.addEventListener("load", () => {
       // this will then display a text file
       texto += reader.result
     }, false);
   
-    if (file) {
-      reader.readAsText(file);
-    }
+    // if (file) {
+    //   reader.readAsText(file);
+    // }
     //retornar info
     this.service.getdata().subscribe(
       (res:any)=>{

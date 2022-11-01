@@ -1,6 +1,45 @@
 <!-- <p>dashboard works!</p> -->
-<button id="action" (click) = getdata()>get data</button>
-<button id="action" (click) = setdata()>set data!</button>
+<nav class="navbar navbar-expand-lg  shadow navbar-light bg-dark bg-gradient">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white " >Proyecto 2 OLC1</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-center">
+          <li class="nav-item">
+            <a class="nav-link active text-white" onc aria-current="page" href="" >Home</a>
+          </li>
+          <li class="nav-item">
+            <div class="dropdown">
+              <button class="dropbtn bg-dark bg-gradient nav-link text-white" onclick="callme()">Options</button>
+              <div class="dropdown-content">
+                <a href="">AST</a>
+                <a href="#">Reporte Tokens</a>
+                <a href="#">Reporte Errores</a>
+                <a href="#">Tabla de simbolos</a>
+                <a href="#">Test</a>
+              </div>
+            </div> 
+          </li>
+          <li>
+            <div class="form-group">
+              <label for="file" class="custom-file-upload">
+                <i class="fa fa-cloud"></i> Cargar Archivo
+              </label>
+              <input id="file"  (change)="readFile($event)" type="file"/>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" aria-current="page" href="https://ijosuer.github.io/CV/">About</a>   
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- <button (click) = getdata()>get data</button>
+<button (click) = setdata()>set data!</button> -->
 <div class="album py-5 bg-dark fondo">
   <div class="container">
       <div class="">
@@ -8,11 +47,20 @@
               <div class="mydiv">
                   <div class="col">
                       <h4 ><i class="fa fa-code"></i> CODIGO</h4>
-                      <textarea id="meteme" rows="25" cols="50" spellcheck="false"></textarea>
-                  </div>
-                  <div class="col">
-                      <h4><i class="fa fa-terminal"></i>  SALIDA</h4>
-                      <textarea id="enviame" rows="25" cols="50" readonly></textarea>
+                      <!-- <textarea id="meteme" rows="25" cols="50" spellcheck="false"></textarea> -->
+                      <div style="width: auto; height: 90%; text-align: left;">
+                        <ngx-monaco-editor [formControl]="editorTexto" [options]="editorOptions"
+                        (init)="editorInit($event)"></ngx-monaco-editor>
+                    </div>
+                </div>
+                <div class="col">
+                    <h4><i class="fa fa-terminal"></i>  SALIDA</h4>
+                    <!-- <textarea id="enviame" rows="25" cols="50" readonly></textarea> -->
+                    
+                    <div style="width: auto; height: 90%; text-align: left;">
+                            <ngx-monaco-editor [formControl]="editorTexto" [options]="editorOptions"
+                                 (init)="editorInit($event)"></ngx-monaco-editor>
+                    </div>
                   </div>
                  
               </div>
