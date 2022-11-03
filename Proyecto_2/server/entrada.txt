@@ -1,0 +1,250 @@
+
+/*  SALIDA ESPERADA:
+            ========= Metodo Declaracion =========
+            Voy a ganar Compiladores 1 :D
+            ======================================
+Evaluar[1/1 + 1 - 1];
+Evaluar[1+1*2];
+Evaluar[-(1+1*6/3-5+7)];
+Evaluar[-(1+1*6/3-5+1*-2)];
+Evaluar[-(2)*5 +10];
+Evaluar [-5*(-1)];
+Evaluar [5^3];
+Evaluar[-(1.6+1.45)];
+Evaluar [7%5];
+    
+
+//Imprimir "hi";
+
+//INt hola,adiosxd;
+
+INt hola,bai,again = 5;
+celular = true;
+boolean flag_personalizada;
+string curso_ = "organización de compiladores 1 2022";
+hola++;
+adiosxd--;
+Boolean mayoria_edad = edad > 21 ? 1:2;
+//edad >= (21-2)*(9/3) ? "hpolap":2 
+int edad = 2020;
+//int anio = edad++;
+    
+    
+    */
+
+/*  ------VECTORES------
+int [ ] vector1 = new Int[4];
+Char [ ][ ] vectorDosd = new Char ["4"] [4] ;
+String [ ] vector2 = {"hola", "Mundo"}; //vector tipo 2.1
+int [] [] vector2 = {{1<3, 2>3,3!=3,4*32+(5/5),5},{1, 2,3,4,5}}; //vector tipo 2.2
+String valorposi = vector2[5][2];
+vector2[1] = "OLC1"; 
+vector2[2] = "2do Semestre" + vector2[1]; 
+id = 21;
+
+    ------ IF -----
+if(x>= 1+2){
+    id = 21;
+}ELif(x+1== 2*2*2){
+    id = 21;
+    id = 21;
+}ELif(VARIABLE_1!= 2*2*2){
+    id = 21;
+}ELif(VARIABLE_1!= 2*2*2){
+    id = 21;
+}ELif(VARIABLE_1!= 2*2*2){
+    id = 21;
+    id = 21;
+    id = 21;
+}
+
+if (x > 50){
+    Print("Mayor que 50");
+    //Más sentencias
+}elif (x <= 50 && y==0){
+    Print ("Menor que 50");
+    if (x > 25){
+        Print("Número mayor que 25");
+        //Más sentencias
+    }else{
+        Print("Número menor que 25");
+        //Más sentencias
+    }
+        //Más sentencias
+}else {
+        Print("Número negativo");
+        //Más
+}
+
+// EJEMPLO DE SWITCH
+int edad = 18;
+switch( edad + 1 ) {
+Case 10:
+    Println("Tengo 10 anios.");
+    // mas sentencias Break;
+Case 11:
+    Println("Tengo 11 anios.");
+    // mas sentencias Break;
+Case 12:
+    Println("Tengo 12 anios.");
+    // mas sentencias Break;
+Case 18:
+    Print("Tengo 18 anios.\n");
+    // mas sentencias Case 25:
+    Println("Tengo 25 anios.");
+    // mas sentencias Break;
+DEFAULT:
+    Println("Tengo default anios.");
+    int id = 2;
+}
+
+while(x > 0 + 1){
+    print("hi");
+}
+
+for ( i=0; i<3;i=i-1 ){
+    vector2[2] = "2do Semestre" + vector2[1]; 
+    if (x > 50){
+        Print("Mayor que 50");
+        //Más sentencias
+    }
+}
+do while
+
+do{
+    if (a>=1 && a <3){
+        Print(true);
+    }
+    else{
+        Print(false);
+    }
+    a--;
+} until (a==0);
+
+holaMundo():int {
+    print("hello world");
+}
+hola(int id, string id);
+//print(hola(ind num, string tuptm));
+print(1+3+4+5);
+print("hi");
+var_3= 1== 0;
+articulos.pop();
+var_3 = (5+6>48)? 1+1:45; 
+int varible_1;
+double varible_2;
+boolean varible_3;
+char varible_4;
+string varible_5;
+int varible_1, varible_11;
+double varible_2, varible_22;
+boolean varible_3, varible_33;
+char varible_4, varible_44;
+string varible_5, varible_55;
+int var_1 = 12;
+int tm1_,tmp2_,tmp3_,tmp4_ = 12+5;
+double var_2 = 15.02;
+double var_2_1 = 2022.00;
+double var_2_2 = 0.10;
+double var_2_3 = 1.0;
+double var_2_4 = 51.1589462625459;
+boolean var_3 = true;
+boolean var_3_1 = false;
+var_1= (1)+2-3+4-5+6-7+8-9;
+var_1= (1+2+3+4)+(5+6+7+8+9);
+var_1= -1+2*3+4*8/8%(5789);
+
+var_3= 5+5-8+6*8+1/7%9>45+6;
+var_3= 6+4-7+9*8*9/7%9<45+6;
+var_3= (7+3)-8+6*8+6/7%9>=45+6;
+var_3= 8+2-7+9*8-9/7%9<=45+6;
+//Casteos
+//int v_5= (int)"hola";
+//string v_1= (string)12%8;
+string a_5=tostring(true);
+
+
+Multiplicacion(int numero1, int numero2):int{
+    if(Universidad=="usac"){
+        var_1= -1+2*3+4*8/8^(2);
+        var_2=1.2+78.1+89.000;
+        double  val1= round(5.800);
+        val1= round(5.800+1.2+0.5);
+        println("tricentenadira");
+        if(Universidad=="usac"){
+            println("tricentenadira");
+            if(Universidad=="usac"){
+                println("tricentenadira");
+                if(Universidad=="usac"){
+                    println("tricentenadira");
+                    //char v_1= (char)12;
+                    //char v_2= (char)12.25;
+                }
+            }
+        }
+    }
+    //este es otro if pero con condicion logica
+    if(anio==2022+22 || semestre=="Segundo"||4>2){
+        println("Usac!!!!");
+        //boolean v_5= (boolean)"hola";
+        if(var_1>= var_2){
+            println("Usac!!!!");
+            //char v_5= (char)"hola";
+        }   
+    }else{
+        //var_1= 1+var_1++;
+        println("sale en otro semestre :( ");
+    }
+     //otra condicion booleanda
+    if( suma==3 && 45+56==12){
+        println("Esta bien");
+        var_1--;
+    }elif(suma==4 || "Universidad"=="usac"){
+        println("Esta es otra suma");
+        //boolean v_4= (boolean)'A';
+        vector1.pop();
+    }elif(suma==4+1){
+        edades.push(50-89*4);
+        println("Esta es otra suma");
+        lista.pop();
+        switch(edad){
+            case 18: 
+                println("mayoria de eddad en guatemala");
+                //string v_5= (string)"hola"+" usac";
+                break;
+            case //Este mensaje no tendria que dar error porque se omite desde el anlaisis lexico21:
+                // Este es la mayoria de edad en otro pais
+                println("mayoria de edad en us");
+                //int v_1= (int)12+1;
+                break;
+            default:
+                //instrucciones si no se da a complir la conidcion
+                var_3 = ("usac"=="usac")? 1:4+5;
+                int var_23 = ("usac"=="usac")? 1:4+5;
+                break;
+        }
+    }
+}
+*/
+//print("hi");
+//print(mi_variable);
+//print(13);
+//print('a');
+//int a;
+//int x = 1;
+//Boolean flag  = true;
+//double num = 0.2;
+/* 
+
+if(a > 2){
+    print('a');
+}else{
+    print('b');
+
+}
+*/
+int i =0;
+    while(i<4 && i+3 != iddd){
+    print("va");
+    break;
+    }

@@ -1,0 +1,52 @@
+digraph mygraph { node [shape=box];
+"Raiz" [label= "Raiz"]; 
+"INST_DECLARACION2461" [label= "INST_DECLARACION"]; 
+"INST_DECLARACION2461i" [label= "Id: i"]; 
+"INST_DECLARACION2461int" [label= "int"]; 
+"Raiz" -> "INST_DECLARACION2461"
+"INST_DECLARACION2461" -> "INST_DECLARACION2461i"
+"INST_DECLARACION2461" -> "INST_DECLARACION2461int"
+"INST_DECLARACION2461" [label= "INST_DECLARACION"]; 
+"VAL_ENTERO2468" [label= "VAL_ENTERO\n0"]; 
+"INST_DECLARACION2461" -> "VAL_ENTERO2468"
+"Raiz" [label= "Raiz"]; 
+"INST_WHILE2475" [label= "INST_WHILE"]; 
+"Raiz" -> "INST_WHILE2475"
+"INST_WHILE2475" [label= "INST_WHILE"]; 
+"AND24711undefinedundefined" [label= "AND\n&&"]; 
+"INST_WHILE2475" -> "AND24711undefinedundefined"
+"AND24711undefinedundefined" [label= "AND\n&&"]; 
+"MENOR24711i4" [label= "MENOR\n<"]; 
+"AND24711undefinedundefined" -> "MENOR24711i4"
+"MENOR24711i4" [label= "MENOR\n<"]; 
+"VAL_IDENTIFICADOR24711" [label= "VAL_IDENTIFICADOR\ni"]; 
+"MENOR24711i4" -> "VAL_IDENTIFICADOR24711"
+"MENOR24711i4" [label= "MENOR\n<"]; 
+"VAL_ENTERO24713" [label= "VAL_ENTERO\n4"]; 
+"MENOR24711i4" -> "VAL_ENTERO24713"
+"AND24711undefinedundefined" [label= "AND\n&&"]; 
+"DIFERENTE24718undefinediddd" [label= "DIFERENTE\n!="]; 
+"AND24711undefinedundefined" -> "DIFERENTE24718undefinediddd"
+"DIFERENTE24718undefinediddd" [label= "DIFERENTE\n!="]; 
+"SUMA24718i3" [label= "SUMA\n+"]; 
+"DIFERENTE24718undefinediddd" -> "SUMA24718i3"
+"SUMA24718i3" [label= "SUMA\n+"]; 
+"VAL_IDENTIFICADOR24718" [label= "VAL_IDENTIFICADOR\ni"]; 
+"SUMA24718i3" -> "VAL_IDENTIFICADOR24718"
+"SUMA24718i3" [label= "SUMA\n+"]; 
+"VAL_ENTERO24720" [label= "VAL_ENTERO\n3"]; 
+"SUMA24718i3" -> "VAL_ENTERO24720"
+"DIFERENTE24718undefinediddd" [label= "DIFERENTE\n!="]; 
+"VAL_IDENTIFICADOR24725" [label= "VAL_IDENTIFICADOR\niddd"]; 
+"DIFERENTE24718undefinediddd" -> "VAL_IDENTIFICADOR24725"
+"INST_WHILE2475" [label= "INST_WHILE"]; 
+"INST_PRINT2485" [label= "INST_PRINT"]; 
+"INST_WHILE2475" -> "INST_PRINT2485"
+"INST_PRINT2485" [label= "INST_PRINT"]; 
+"VAL_CADENA24811" [label= "VAL_CADENA\nva"]; 
+"INST_PRINT2485" -> "VAL_CADENA24811"
+"INST_WHILE2475" [label= "INST_WHILE"]; 
+"INST_BREAK2495" [label= "INST_BREAK"]; 
+"INST_WHILE2475" -> "INST_BREAK2495"
+
+}
