@@ -14,11 +14,10 @@
             <div class="dropdown">
               <button class="dropbtn bg-dark bg-gradient nav-link text-white" onclick="callme()">Options</button>
               <div class="dropdown-content">
-                <a href="">AST</a>
-                <a href="#">Reporte Tokens</a>
-                <a href="#">Reporte Errores</a>
-                <a href="#">Tabla de simbolos</a>
-                <a href="#">Test</a>
+                <a (click)="loadPick()" href="#">AST</a>
+                <a href="#T_simbolos">Tabla de simbolos</a>
+                <!-- <a href="#">Reporte Tokens</a> -->
+                <a href="#T_errores">Reporte Errores</a>
               </div>
             </div> 
           </li>
@@ -42,12 +41,12 @@
 <button (click) = setdata()>set data!</button> -->
 <div class="album py-5 bg-dark fondo">
   <div class="container">
-      <div class="">
-          <div class="col-md-12 align-items-left">
-              <div class="mydiv">
-                  <div class="col">
+    <div class="">
+      <div class="col-md-12 align-items-left">
+        <div class="mydiv">
+          <button type="button" (click)="analizar()" class="btn center" style="position: absolute; margin-left: 607px;font-weight: bold ;background-color: rgb(151, 235, 151);">Ejecutar</button>
+          <div class="col">
                       <h4 ><i class="fa fa-code"></i> CODIGO</h4>
-                      <!-- <textarea id="meteme" rows="25" cols="50" spellcheck="false"></textarea> -->
                       <div style="width: auto; height: 90%; text-align: left;">
                         <ngx-monaco-editor [formControl]="editorTexto" [options]="editorOptions"
                         (init)="editorInit($event)"></ngx-monaco-editor>
@@ -55,16 +54,63 @@
                 </div>
                 <div class="col">
                     <h4><i class="fa fa-terminal"></i>  SALIDA</h4>
-                    <!-- <textarea id="enviame" rows="25" cols="50" readonly></textarea> -->
-                    
                     <div style="width: auto; height: 90%; text-align: left;">
-                            <ngx-monaco-editor [formControl]="editorTexto" [options]="editorOptions"
+                            <ngx-monaco-editor [formControl]="consola" [options]="consoleOptions"
                                  (init)="editorInit($event)"></ngx-monaco-editor>
                     </div>
                   </div>
-                 
               </div>
           </div>
       </div>
   </div>
 </div>
+<br>
+        <div align="center" >
+            <div class="col-md-9">
+            <h1>Tabla de errores</h1>
+                <table id="T_errores"  class="table table-dark">
+                <thead>
+                    <tr class="bg-warning">
+                        <th >Tipo</th >
+                        <th >Descripcion</th >
+                        <th >Linea</th >
+                        <th >Columna</th >
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let e of data_error">
+                        <td>{{e.tipo}}</td>
+                        <td>{{e.descripcion}}</td>
+                        <td>{{e.linea}}</td>
+                        <td>{{e.columna}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div></div>
+        <br>
+        <div align="center" >
+            <div class="col-md-9">
+            <h1>Tabla de Símbolos</h1>
+                <table id="T_simbolos" class="table table-dark">
+                <thead>
+                    <tr class="bg-warning">
+                        <th >Identificador</th >
+                        <th >Tipo</th >
+                        <th >Tipo</th >
+                        <th >Entorno</th >
+                        <th >Linea</th >
+                        <th >Columna</th >
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let e of data_simbolo">
+                        <td>{{e.id}}</td>
+                        <td>{{e.soy}}</td>
+                        <td>{{e.tipo}}</td>
+                        <td>{{e.entorno}}</td>
+                        <td>{{e.linea}}</td>
+                        <td>{{e.columna}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>

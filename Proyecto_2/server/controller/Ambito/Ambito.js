@@ -7,13 +7,12 @@ class Ambito{
     }
 // variables y de todos los simbolos
     addSimbolo(_s, _simbolo){
-        console.log('add simbolo'+_simbolo);
-        this.tablaSimbolos.set(_s.toLowerCase(), _simbolo)
+        this.tablaSimbolos.set(_s, _simbolo)
     }
 
     getSimbolo(_s){ 
         for(let e=this; e!=null; e=e.anterior){
-            var encontrado = e.tablaSimbolos.get(_s.toLowerCase()) 
+            var encontrado = e.tablaSimbolos.get(_s) 
             /*console.log("***********************************")
             console.log(_s)
             console.log(encontrado)
@@ -27,7 +26,7 @@ class Ambito{
     
     existeSimbolo(_s){
         for(let e=this; e!=null; e=e.anterior){
-            var encontrado = e.tablaSimbolos.get(_s.toLowerCase())
+            var encontrado = e.tablaSimbolos.get(_s)
             if(encontrado!=null){
                 return true
             }
@@ -35,7 +34,7 @@ class Ambito{
         return false
     }
     existeSimbolodecla(_s){
-            var encontrado = this.tablaSimbolos.get(_s.toLowerCase())
+            var encontrado = this.tablaSimbolos.get(_s)
             if(encontrado!=null){
                 return true
             }
@@ -43,7 +42,7 @@ class Ambito{
     }
     actualizar(_s, _simbolo){
         for(let e=this; e!=null; e=e.anterior){
-            var encontrado = e.tablaSimbolos.get(_s.toLowerCase());
+            var encontrado = e.tablaSimbolos.get(_s);
             if(encontrado!=null){
                 e.tablaSimbolos.set(_s, _simbolo)
                 return true;
@@ -53,12 +52,12 @@ class Ambito{
     }
 // metodos
     addMetodo(_s, _metodo){
-        this.tablaMetodos.set(_s.toLowerCase(), _metodo)
+        this.tablaMetodos.set(_s, _metodo)
     }
 
     getMetodo(_s){ //(hola, clase simbolo)
         for(let e=this; e!=null; e=e.anterior){
-            var encontrado = e.tablaMetodos.get(_s.toLowerCase()) //hola<=>HoLA
+            var encontrado = e.tablaMetodos.get(_s) //hola<=>HoLA
             if(encontrado!=null){
                 return encontrado
             }
@@ -68,7 +67,7 @@ class Ambito{
 
     existeMetodo(_s){
         for(let e=this; e!=null; e=e.anterior){
-            var encontrado = e.tablaMetodos.get(_s.toLowerCase()) //hola<=>HoLA
+            var encontrado = e.tablaMetodos.get(_s) //hola<=>HoLA
             if(encontrado!=null){
                 return true
             }
@@ -78,7 +77,7 @@ class Ambito{
 
     actualizarMetodo(_s, _metodo){
         for(let e=this; e!=null; e=e.anterior){
-            var encontrado = e.tablaMetodos.get(_s.toLowerCase());
+            var encontrado = e.tablaMetodos.get(_s);
             if(encontrado!=null){
                 e.tablaMetodos.set(_s, _metodo)
                 return true;

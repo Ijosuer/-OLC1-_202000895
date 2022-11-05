@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from "rxjs";
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,16 @@ export class UserService {
     return this.http.post(`${this.URL}/setAument`,json);
 
   }
+  ejecutar(codigo: any):Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+    return this.http.post(`${this.URL}/analizar`, codigo,httpOptions);
+  }
+  cargarImagen(){
+      return this.http.get(`${this.URL}/getASTimage`)
+  }
 
 }
-
-

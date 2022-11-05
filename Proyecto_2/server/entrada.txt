@@ -243,8 +243,15 @@ if(a > 2){
 
 }
 */
-int i =0;
-    while(i<4 && i+3 != iddd){
-    print("va");
-    break;
-    }
+
+h():void{
+    int a = 1;
+    //string b = "ok";
+    print("a");
+    print("b");
+    print("c");
+    
+
+}
+int varible_1;
+run h();

@@ -25,6 +25,11 @@ const Instruccion = {
     },
     
     nuevoVALOR:function(_valor, _tipo, _linea, _columna){
+        console.log(_tipo)
+        if(_tipo == 'VAL_CADENA' ||_tipo == 'VAL_CARACTER' ){
+            console.log(_valor)
+            _valor = _valor.replace(/['"]+/g, '');
+        }
         return{
             tipo: _tipo,
             valor: _valor,
@@ -38,7 +43,6 @@ const Instruccion = {
     },
 
     nuevaDECLARACION: function(_id, _valor, _tipo, _linea, _columna){
-        // console.log(_valor);
         return{
             tipo: TIPO_INSTRUCCION.DECLARACION,
             id: _id,

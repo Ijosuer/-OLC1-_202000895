@@ -22,7 +22,7 @@ function Global(_instrucciones, _ambito,_Error,_entorno,Simbol){
         
         var nuevo=new ERRORES(TIPO_ERROR.SEMANTICO,"No se ha detectado la sentencia RUN",_instrucciones.linea, _instrucciones.columna);
         _Error.addErrores(nuevo)
-        return 'Error Semantico: No se ha detectado la sentencia EXEC'
+        return 'Error Semantico: No se ha detectado la sentencia RUN'
     }
     else if(contadorExec>1){
         var nuevo=new ERRORES(TIPO_ERROR.SEMANTICO,'Se ha detectado '+contadorExec+' RUN',_instrucciones.linea, _instrucciones.columna);

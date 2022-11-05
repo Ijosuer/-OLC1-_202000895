@@ -13,7 +13,8 @@ import {MonacoEditorComponent,MonacoEditorConstructionOptions,MonacoEditorLoader
 })
 
 export class DashboardComponent implements OnInit {
-  
+  data_error: any;
+  data_simbolo: any;
   opciones: string[]=[];
 
   @ViewChild(MonacoEditorComponent, { static: false })
@@ -29,7 +30,10 @@ export class DashboardComponent implements OnInit {
     language: '',
     roundedSelection: true,
     autoIndent:"full",
-    readOnly:true
+    readOnly:true,
+    minimap: {
+      enabled: false
+    }
   };
   editorTexto = new FormControl('');
   consola = new FormControl('');
@@ -71,14 +75,13 @@ export class DashboardComponent implements OnInit {
   }
 
   readFile(event:any){
-  let textArea = document.getElementById('meteme') as HTMLInputElement;
   let input=event.target;
   let reader = new FileReader();
   reader.onload=()=>{
     var text=reader.result;
     if(text){
-      textArea.value = text.toString();
-    }
+      this.editorTexto.setValue(text.toString());
+    } 
 
   }
   reader.readAsText(input.files[0]);
@@ -130,4 +133,30 @@ export class DashboardComponent implements OnInit {
     )
   }
 
+  analizar(){
+    var texto = {
+      prueba: this.editorTexto.value
+    }
+    this.service.ejecutar(texto).subscribe((res:any)=>{
+      // this.consola.setValue(res.consola);
+      console.log(res);
+      // this.consola.setValue(res.consola);
+      let errores=res.errores.tablaErrores;
+      let Simbol_l=res.Simbol_lit.listado_Simbolos;
+      this.data_error=errores;
+      this.data_simbolo=Simbol_l;
+      console.log(this.data_simbolo)
+      this.consola.setValue(res.consola);
+    }, err=>{
+      console.log("ERROR: "+err)
+    });
+  }
+
+  loadPick(){
+    this.service.cargarImagen().subscribe((res:any)=>{
+      console.log('Cargando Imagen...')
+    },(err)=>{
+      console.log(err);
+    }
+  )};
 }

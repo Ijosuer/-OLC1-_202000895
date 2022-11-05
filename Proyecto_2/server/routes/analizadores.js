@@ -34,7 +34,6 @@ module.exports=(parser, app)=>{
                 // consola: "print();"
                 consola: devuelve
             }
-            console.log(resultado);
             res.send(resultado)
             //console.log("---------------act-------------------------")
             //console.log(Gdot)

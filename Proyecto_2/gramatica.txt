@@ -1,0 +1,241 @@
+
+INI
+	: INSTRUCCIONES EOF 
+		| error ptyComa 
+;
+
+INSTRUCCIONES
+	: INSTRUCCION INSTRUCCIONES
+	| INSTRUCCION
+	| error 
+	;
+
+INSTRUCCION
+	: DECLARACION
+	| IMPRIMIR
+	| ASIGNACION
+	| INCREMENTO ';'
+	| IF 
+	| SWITCH
+	| FOR
+	| WHILE
+	| DOWHILE
+	| DOUNTIL
+	| METODO
+	| FUNCION
+	| CALL ';'
+	| BREAK
+	| CONTINUE
+	| POP
+	| PUSH
+	| CASTEOS
+	| TERNARIO
+	 
+;
+
+DECLARACION 
+	: TIPO LISTID ';' 
+	| TIPO LISTID '=' EXPRESION ';'  
+	| VECT_T1
+	| VECT_T2
+;
+
+IMPRIMIR
+	: 'res_print' '(' EXPRESION ')' ';' 
+	| 'res_println' '(' CALL ')' ';' 		
+	| 'res_println' '(' EXPRESION ')' ';'
+	| 'res_print' '(' CALL ')' ';'			 
+;
+
+ASIGNACION 
+	: ID '=' EXPRESION ';' 
+	| MODIF_VEC 
+;
+
+TERNARIO
+	:	EXPRESION '?' EXPRESION ':' EXPRESION 
+;
+
+//---------------VECTORES---------------//
+//----------TIPO 1 ----------//
+VECT_T1
+	: TIPO '[' ']' ID '=' 'nnew' TIPO '[' EXPRESION ']' ';' 
+	| TIPO '[' ']' '[' ']' ID '=' 'nnew' TIPO '[' EXPRESION ']' '[' EXPRESION ']' ';' 
+;
+
+//----------TIPO 2 ----------//
+VECT_T2
+	: TIPO '[' ']' ID '='  '{' LISTAVALORES '}' ';' 
+	| TIPO '[' ']' '[' ']' ID '='  '{' '{' LISTAVALORES '}' ',' '{' LISTAVALORES '}' '}' ';' 
+;
+
+//---------------ACCESO VECTORES---------------//
+ACCESO_VEC
+	: ID '[' EXPRESION ']'
+	| ID '[' EXPRESION ']' '[' EXPRESION ']' 
+;
+
+POP
+	: ID 'pop' '(' ')' ';'
+;
+
+PUSH
+	: ID 'push' '(' EXPRESION ')' ';'
+;
+//---------------MODIFICAR VECTORES---------------//
+MODIF_VEC
+	: ACCESO_VEC '=' EXPRESION ';'
+;
+
+//---------------SENTENCIAS DE CONTROL---------------//
+//---------------IF---------------//
+IF
+	: 'if' '(' EXPRESION ')' '{' INSTRUCCIONES '}' 
+	| 'if' '(' EXPRESION ')' '{' INSTRUCCIONES '}' ELSEIF
+	| 'if' '(' EXPRESION ')' '{' INSTRUCCIONES '}' 'else' '{' INSTRUCCIONES '}' 
+	| 'if' '(' EXPRESION ')' '{' INSTRUCCIONES '}' ELSEIF 'else' '{' INSTRUCCIONES '}' 
+;
+
+ELSEIF
+	: ELSEIF 'elif' '(' EXPRESION ')' '{' INSTRUCCIONES '}'
+	| 'elif' '(' EXPRESION ')' '{' INSTRUCCIONES '}'
+;
+
+//---------------SWITCH---------------//
+SWITCH
+	: 'switch' '(' EXPRESION ')' '{' SWITCH_  'defolt' ':' INSTRUCCIONES '}' 
+	| 'switch' '(' EXPRESION ')' '{' SWITCH_ '}'														 
+	| 'switch' '(' EXPRESION ')' '{' 'defolt' ':' INSTRUCCIONES '}' 				 
+;
+
+SWITCH_
+	: SWITCH_ 'case' EXPRESION ':' INSTRUCCIONES 
+	| 'case' EXPRESION ':' INSTRUCCIONES
+;
+
+//---------------SENTENCIAS CICLICAS---------------//
+WHILE
+	: 'while' '(' EXPRESION ')' '{' INSTRUCCIONES '}' {
+;
+
+FOR
+	: 'for' '(' DECLARACION EXPRESION ';' INCREMENTO ')' '{' INSTRUCCIONES '}'  			
+	| 'for' '(' ASIGNACION  EXPRESION ';' INCREMENTO ')' '{' INSTRUCCIONES '}'  			
+	| 'for' '(' DECLARACION EXPRESION ';' ID '=' EXPRESION ')' '{' INSTRUCCIONES '}'  
+	| 'for' '(' ASIGNACION  EXPRESION ';' ID '=' EXPRESION ')' '{' INSTRUCCIONES '}'  
+;
+
+DOWHILE
+	: 'do' '{' INSTRUCCIONES '}' 'while' '(' EXPRESION ')' ';'	
+
+DOUNTIL
+	: 'do' '{' INSTRUCCIONES '}' 'until' '(' EXPRESION ')' ';'	
+;
+
+//BREAK
+BREAK
+	: 'break' ';' {console.log('break')}
+;
+
+//CONTINUE
+CONTINUE
+	: 'continue' ';' {console.log('continue')}
+;
+
+//---------------CASTEOS---------------//
+CASTEO
+	: 'tolower' '(' EXPRESION ')'
+	| 'toupper' '(' EXPRESION ')'
+	| 'round' '(' EXPRESION ')'
+	| 'length' '(' VECT_T1 ')'
+	| 'length' '(' VECT_T2 ')'
+	| 'length' '(' CADENA ')'
+	| 'typeof' '(' EXPRESION ')'
+	| 'tostring' '(' EXPRESION ')'
+	| 'tochararray' '(' CADENA ')'
+;
+
+//---------------FUNCIONES---------------//
+
+FUNCION
+	: ID '(' LISTP ')' ':' TIPO '{' INSTRUCCIONES '}' 
+	| ID '(' ')' ':' TIPO '{' INSTRUCCIONES '}' 
+;
+
+
+METODO
+	: ID '(' LISTP ')' ':' 'void' '{' INSTRUCCIONES '}' 
+	| ID '(' LISTP ')' '{' INSTRUCCIONES '}' 
+	| ID '(' ')' ':' 'void' '{' INSTRUCCIONES '}' 
+	| ID '(' ')' '{' INSTRUCCIONES '}' 
+;
+
+RETORNO
+	: 'return' EXPRESION ';' 
+	| 'return' ';' 
+;
+
+CALL
+	:	ID '(' LISTP ')' 
+	|	ID '(' ')' 
+	|	'run' ID '(' LISTP ')'
+	|	'run' ID '(' ')' 
+;
+//Pendiente que especifiquen this
+INCREMENTO
+	: ID '++'  
+	| ID '--'  
+;
+
+
+TIPO
+	: int 		
+	| char 		
+	| string	
+	| double 	
+	| boolean 
+;
+
+LISTID
+	: LISTID ',' ID 
+	| ID 
+;
+
+LISTAVALORES
+	: LISTAVALORES ',' EXPRESION 
+	| EXPRESION 
+;
+
+LISTP
+	: LISTP ',' TIPO ID 
+	| TIPO ID 
+
+EXPRESION
+	: '-' EXPRESION %prec U-		
+	| EXPRESION '+' EXPRESION		
+	| EXPRESION '-' EXPRESION		
+	| EXPRESION '*' EXPRESION		
+	| EXPRESION '/' EXPRESION		
+	| EXPRESION '^' EXPRESION		
+	| EXPRESION '%' EXPRESION		
+	| EXPRESION '<' EXPRESION			
+	| EXPRESION '<=' EXPRESION		
+	| EXPRESION '>=' EXPRESION		
+	| EXPRESION '>' EXPRESION			
+	| EXPRESION '==' EXPRESION		
+	| EXPRESION '!=' EXPRESION		
+	| EXPRESION '&&' EXPRESION		
+	| EXPRESION '||' EXPRESION		
+	| '!' EXPRESION								
+	| TERNARIO										
+	| INCREMENTO										
+	| ACCESO_VEC									
+	| CASTEO										
+	| ENTERO										
+	| DECIMAL										
+	| CADENA										
+	| ID												
+	| true											
+	| false											
+	| '(' EXPRESION ')'					
+;

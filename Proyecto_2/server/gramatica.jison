@@ -8,11 +8,10 @@
 /* Definición Léxica */
 
 %lex
-
 %options case-insensitive
+%x string
 
 %%
-
 //Expresiones Regulares de comentarios
 (\/\/(.)*) {console.log('comentario una linea')}
 \/\*[\s\S]*?\*\/ {console.log('comentario multiLinea')}
@@ -100,15 +99,24 @@
 //Expresiones para tipos de datos
 [0-9]+("."[0-9]+)?\b  	return 'DECIMAL';
 [0-9]+\b								return 'ENTERO';
-\"[^"]+\" 							return 'CADENA';
 ["\'"]([^"\'"])?["\'"]  return 'caracter'
+
+["]                          		{cadena="";this.begin("string");}
+<string>[^"\\]+                 {cadena+=yytext;}
+<string>"\\\""                  {cadena+="\"";}
+<string>"\\n"                  {cadena+="\n";}
+<string>\s                  		{cadena+=" ";}
+<string>"\\t"                  {cadena+="\t";}
+<string>"\\\\"                  {cadena+="\\";}
+<string>"\\\'"                  {cadena+="\'";}
+<string>["]                  		{yytext=cadena; this.popState(); return 'CADENA';}
+
 //Expresion para un ID
 ["_"0-9A-Za-z]*\b					return 'ID';
 
 /* Espacios en blanco */
 [ \r\t]+			{}
 \n					{}
-
 <<EOF>>				return 'EOF';
 
 .					{var nuevo=new ERRORES(TIPO_ERROR.LEXICO,"Caracter invalido: "+yytext,yylloc.first_line,yylloc.first_column+1);lista_Errores.push(nuevo); return 'INVALID';}
@@ -140,15 +148,15 @@ INI
 ;
 
 INSTRUCCIONES
-	: INSTRUCCIONES INSTRUCCION {$1.push($2); $$ = $1;} 
-	| INSTRUCCION								{$$=[$1];}
+	: INSTRUCCIONES CUERPO {$1.push($2); $$ = $1;} 
+	| CUERPO								{$$=[$1];}
 ;
 
-INSTRUCCION
+CUERPO
 	: DECLARACION		{$$=$1} 
 	| IMPRIMIR			{$$=$1}
 	| ASIGNACION		{$$=$1}
-	| INCREMENTO ';'{$$=$1}
+	| INCREMENTO ';'{$$ = INSTRUCCION.nuevaASIGNACION_InDe($1, this._$.first_line, (this._$.first_column+1));}
 	| IF 						{$$=$1}
 	| SWITCH				{$$=$1}
 	| FOR						{$$=$1}
@@ -310,15 +318,15 @@ RETORNO
 ;
 
 CALL
-	:	ID '(' LISTP ')' {console.log('llamando funcion '+$1+' con parametros')}
-	|	ID '(' ')' {console.log('llamando funcion '+$1)}
+	:	ID '(' LISTP ')' {$$ = INSTRUCCION.Llamadas($1, $3,this._$.first_line, (this._$.first_column+1));}
+	|	ID '(' ')' {$$ = INSTRUCCION.Llamadas($1, null,this._$.first_line, (this._$.first_column+1));}
 	|	'run' ID '(' LISTP ')' {$$ = INSTRUCCION.Exec($2, $4,this._$.first_line, (this._$.first_column+1));}
 	|	'run' ID '(' ')' {$$ = INSTRUCCION.Exec($2, null,this._$.first_line, (this._$.first_column+1));}
 ;
 //Pendiente que especifiquen this
 INCREMENTO
-	: ID '++'  {$$ = INSTRUCCION.nuevaASIGNACION($1, INSTRUCCION.nuevaOperacionBinaria(INSTRUCCION.nuevoVALOR( $1, TIPO_VALOR.IDENTIFICADOR,this._$.first_line, (this._$.first_column+1)),INSTRUCCION.nuevoVALOR( 1, TIPO_VALOR.ENTERO, this._$.first_line, (this._$.first_column+1)),TIPO_OPERACION.SUMA, this._$.first_line, (this._$.first_column+1)), this._$.first_line, (this._$.first_column+1));} 
-	| ID '--'  {$$ = INSTRUCCION.nuevaASIGNACION($1, INSTRUCCION.nuevaOperacionBinaria(INSTRUCCION.nuevoVALOR( $1, TIPO_VALOR.IDENTIFICADOR,this._$.first_line, (this._$.first_column+1)),INSTRUCCION.nuevoVALOR( 1, TIPO_VALOR.ENTERO, this._$.first_line, (this._$.first_column+1)),TIPO_OPERACION.SUMA, this._$.first_line, (this._$.first_column+1)), this._$.first_line, (this._$.first_column+1));}
+	: ID '++'  {$$ = INSTRUCCION.nuevaOperacionBinaria(INSTRUCCION.nuevoVALOR( $1, TIPO_VALOR.IDENTIFICADOR,this._$.first_line, (this._$.first_column+1)),INSTRUCCION.nuevoVALOR( 1, TIPO_VALOR.ENTERO, this._$.first_line, (this._$.first_column+1)),TIPO_OPERACION.SUMA, this._$.first_line, (this._$.first_column+1));}
+	| ID '--' {$$ = INSTRUCCION.nuevaOperacionBinaria(INSTRUCCION.nuevoVALOR( $1, TIPO_VALOR.IDENTIFICADOR,this._$.first_line, (this._$.first_column+1)),INSTRUCCION.nuevoVALOR( 1, TIPO_VALOR.ENTERO, this._$.first_line, (this._$.first_column+1)),TIPO_OPERACION.SUMA, this._$.first_line, (this._$.first_column+1));}
 ;
 
 
@@ -346,7 +354,7 @@ LISTP
 ;
 
 EXPRESION
-	: '-' EXPRESION %prec U-			{$$ = INSTRUCCION.nuevaOperacionBinaria($1,$3,TIPO_OPERACION.NEGACION, this._$.first_line, (this._$.first_column+1));}
+	: '-' EXPRESION %prec U-			{$$ = INSTRUCCION.nuevaOperacionBinaria($2,$2,TIPO_OPERACION.NEGACION, this._$.first_line, (this._$.first_column+1));}
 	| EXPRESION '+' EXPRESION			{$$ = INSTRUCCION.nuevaOperacionBinaria($1,$3,TIPO_OPERACION.SUMA, this._$.first_line, (this._$.first_column+1));}
 	| EXPRESION '-' EXPRESION			{$$ = INSTRUCCION.nuevaOperacionBinaria($1,$3,TIPO_OPERACION.RESTA, this._$.first_line, (this._$.first_column+1));}
 	| EXPRESION '*' EXPRESION			{$$ = INSTRUCCION.nuevaOperacionBinaria($1,$3,TIPO_OPERACION.MULTIPLICACION, this._$.first_line, (this._$.first_column+1));}
@@ -361,13 +369,13 @@ EXPRESION
 	| EXPRESION '!=' EXPRESION		{$$ = INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.DIFERENTE,this._$.first_line,this._$.first_column+1);}
 	| EXPRESION '&&' EXPRESION		{$$ = INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.AND,this._$.first_line,this._$.first_column+1);}
 	| EXPRESION '||' EXPRESION		{$$ = INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.OR,this._$.first_line,this._$.first_column+1);}
-	| '!' EXPRESION								{$$ = INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.NOT,this._$.first_line,this._$.first_column+1);}
+	| '!' EXPRESION								{$$ = INSTRUCCION.nuevaOperacionBinaria($2,$2, TIPO_OPERACION.NOT,this._$.first_line,this._$.first_column+1);}
 	| TERNARIO										{$$=$1;}
 	| INCREMENTO									{$$=$1;}
 	| ACCESO_VEC									{$$=$1;}
 	| CASTEO											{$$=$1;}
 	| ENTERO											{$$ = INSTRUCCION.nuevoVALOR( Number($1), TIPO_VALOR.ENTERO, this._$.first_line, (this._$.first_column+1));}
-	| DECIMAL											{$$ = INSTRUCCION.nuevoVALOR( Number($1), TIPO_VALOR.ENTERO, this._$.first_line, (this._$.first_column+1));}
+	| DECIMAL											{$$ = INSTRUCCION.nuevoVALOR( Number($1), TIPO_VALOR.DECIMAL, this._$.first_line, (this._$.first_column+1));}
 	| CADENA											{$$ = INSTRUCCION.nuevoVALOR($1 , TIPO_VALOR.CADENA, this._$.first_line, (this._$.first_column+1));}
 	| caracter										{$$ = INSTRUCCION.nuevoVALOR($1 , TIPO_VALOR.CARACTER, this._$.first_line, (this._$.first_column+1));}
 	| ID													{$$ = INSTRUCCION.nuevoVALOR($1 , TIPO_VALOR.IDENTIFICADOR, this._$.first_line, (this._$.first_column+1));}
