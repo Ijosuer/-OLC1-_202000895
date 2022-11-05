@@ -1,2 +1,14 @@
-"hola" , "adios"
+h():void{
+    int a = 1;
+    string x = 'a';
+    //string b = "ok";
+    print("a");
+    print("b");
+    print("c");
+    @@
+    //print(a);
+    print(x);
+    
 
+}
+run h();

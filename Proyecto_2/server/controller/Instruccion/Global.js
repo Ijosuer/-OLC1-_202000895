@@ -20,14 +20,14 @@ function Global(_instrucciones, _ambito,_Error,_entorno,Simbol){
     }
     if(contadorExec==0){
         
-        var nuevo=new ERRORES(TIPO_ERROR.SEMANTICO,"No se ha detectado la sentencia EXEC",_instrucciones.linea, _instrucciones.columna);
+        var nuevo=new ERRORES(TIPO_ERROR.SEMANTICO,"No se ha detectado la sentencia RUN",_instrucciones.linea, _instrucciones.columna);
         _Error.addErrores(nuevo)
         return 'Error Semantico: No se ha detectado la sentencia EXEC'
     }
     else if(contadorExec>1){
-        var nuevo=new ERRORES(TIPO_ERROR.SEMANTICO,'Se ha detectado '+contadorExec+' EXEC',_instrucciones.linea, _instrucciones.columna);
+        var nuevo=new ERRORES(TIPO_ERROR.SEMANTICO,'Se ha detectado '+contadorExec+' RUN',_instrucciones.linea, _instrucciones.columna);
         _Error.addErrores(nuevo)
-        return 'Error Semantico: Se ha detectado '+contadorExec+' EXEC'
+        return 'Error Semantico: Se ha detectado '+contadorExec+' RUN'
     }
 //2DA: DECLARAR VARIABLES, METODOS Y ASIGNAR VALORES
     for(let i=0; i<_instrucciones.length; i++){

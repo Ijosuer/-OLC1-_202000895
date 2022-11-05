@@ -38,7 +38,7 @@ const Instruccion = {
     },
 
     nuevaDECLARACION: function(_id, _valor, _tipo, _linea, _columna){
-        console.log('>Declarando a: '+_id)
+        // console.log(_valor);
         return{
             tipo: TIPO_INSTRUCCION.DECLARACION,
             id: _id,

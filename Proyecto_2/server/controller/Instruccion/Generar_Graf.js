@@ -10,17 +10,16 @@ function Generar_Graf(contenido){
     //     if (err) {
     //         return console.log(err);
     //     }
-        var exec = require('child_process').exec, child;
-
-        child = exec('dot -Tpng ArbolAST.dot -o ArbolAST.png && open ArbolAST.png',
-            function (error, stdout, stderr) {
-                // console.log('stdout: ' + stdout);
-                // console.log('stderr: ' + stderr);
-                if (error !== null) {
-                    console.log('exec error: ' + error);
-                }
-            });
-        return console.log("AST done!");
+        // var exec = require('child_process').exec, child;
+        // child = exec('dot -Tpng ArbolAST.dot -o ArbolAST.png && open ArbolAST.png',
+        //     function (error, stdout, stderr) {
+        //         // console.log('stdout: ' + stdout);
+        //         // console.log('stderr: ' + stderr);
+        //         if (error !== null) {
+        //             console.log('exec error: ' + error);
+        //         }
+        //     });
+    return console.log("AST done!");
 }
 
 module.exports = Generar_Graf

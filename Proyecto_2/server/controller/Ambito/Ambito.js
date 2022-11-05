@@ -7,6 +7,7 @@ class Ambito{
     }
 // variables y de todos los simbolos
     addSimbolo(_s, _simbolo){
+        console.log('add simbolo'+_simbolo);
         this.tablaSimbolos.set(_s.toLowerCase(), _simbolo)
     }
 

@@ -111,7 +111,7 @@
 
 <<EOF>>				return 'EOF';
 
-.					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.					{var nuevo=new ERRORES(TIPO_ERROR.LEXICO,"Caracter invalido: "+yytext,yylloc.first_line,yylloc.first_column+1);lista_Errores.push(nuevo); return 'INVALID';}
 /lex
 %{
         
@@ -136,14 +136,12 @@
 %% /* Definición de la gramática */
 
 INI
-	: INSTRUCCIONES EOF {var a={'errores':lista_Errores,'arbol':$1}; lista_Errores=[]; return a;}
-	 | error ptyComa    
+	: INSTRUCCIONES EOF {var a={'errores':lista_Errores,'arbol':$1}; lista_Errores=[]; return a;} 
 ;
 
 INSTRUCCIONES
 	: INSTRUCCIONES INSTRUCCION {$1.push($2); $$ = $1;} 
 	| INSTRUCCION								{$$=[$1];}
-	| error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 ;
 
 INSTRUCCION
@@ -164,6 +162,7 @@ INSTRUCCION
 	| CONTINUE			{$$=$1}
 	| POP						{$$=$1}
 	| PUSH					{$$=$1}
+	| error ';' {$$ = ""; var nuevo=new ERRORES(TIPO_ERROR.SINTACTICO,"Error recuperado con: "+yytext,this._$.first_line, (this._$.first_column+1));lista_Errores.push(nuevo);}
 	//| TERNARIO
 	 
 ;
@@ -193,7 +192,7 @@ TERNARIO
 //---------------VECTORES---------------//
 //----------TIPO 1 ----------//
 VECT_T1
-	: TIPO '[' ']' ID '=' 'nnew' TIPO '[' EXPRESION ']' ';' {console.log('vector tipo 1.1');}
+	: TIPO '[' ']' ID '=' 'nnew' TIPO '[' EXPRESION ']' ';' 
 	| TIPO '[' ']' '[' ']' ID '=' 'nnew' TIPO '[' EXPRESION ']' '[' EXPRESION ']' ';' {console.log('vector tipo 1.2');}
 ;
 
@@ -293,16 +292,16 @@ CASTEO
 //---------------FUNCIONES---------------//
 
 FUNCION
-	: ID '(' LISTP ')' ':' TIPO '{' INSTRUCCIONES '}' {console.log('Funcion: '+$1+' declarada')}
-	| ID '(' ')' ':' TIPO '{' INSTRUCCIONES '}' {console.log('Funcion sin parametros: '+$1+' declarada')}
+	: ID '(' LISTP ')' ':' TIPO '{' INSTRUCCIONES '}' {$$ = INSTRUCCION.nuevaFUNCION($6,$1, $3, $8, this._$.first_line, (this._$.first_column+1));}
+	| ID '(' ')' ':' TIPO '{' INSTRUCCIONES '}' {$$ = INSTRUCCION.nuevaFUNCION($5,$1, null, $7, this._$.first_line, (this._$.first_column+1));}
 ;
 // REUTURN *
 
 METODO
-	: ID '(' LISTP ')' ':' 'void' '{' INSTRUCCIONES '}' {console.log('Metodo con void: '+$1+' declarado')}
-	| ID '(' LISTP ')' '{' INSTRUCCIONES '}' {console.log('Metodo sin void: '+$1+' declarado')}
-	| ID '(' ')' ':' 'void' '{' INSTRUCCIONES '}' {console.log('Metodo con void sin parametros: '+$1+' declarado')}
-	| ID '(' ')' '{' INSTRUCCIONES '}' {console.log('Metodo sin void ni apramtros: '+$1+' declarado')}
+	: ID '(' LISTP ')' ':' 'void' '{' INSTRUCCIONES '}' {$$ = INSTRUCCION.nuevaMETODO($1, $3, $8 , this._$.first_line,(this._$.first_column+1));}
+	| ID '(' LISTP ')' '{' INSTRUCCIONES '}' {$$ = INSTRUCCION.nuevaMETODO($1, $3, $6 , this._$.first_line,(this._$.first_column+1));}
+	| ID '(' ')' ':' 'void' '{' INSTRUCCIONES '}' {$$ = INSTRUCCION.nuevaMETODO($1, null, $7 , this._$.first_line,(this._$.first_column+1));}
+	| ID '(' ')' '{' INSTRUCCIONES '}'{$$ = INSTRUCCION.nuevaMETODO($1, null, $5 , this._$.first_line,(this._$.first_column+1));}
 ;
 
 RETORNO
@@ -313,8 +312,8 @@ RETORNO
 CALL
 	:	ID '(' LISTP ')' {console.log('llamando funcion '+$1+' con parametros')}
 	|	ID '(' ')' {console.log('llamando funcion '+$1)}
-	|	'run' ID '(' LISTP ')' {console.log('llamando funcion '+$1)}
-	|	'run' ID '(' ')' {console.log('llamando funcion '+$1)}
+	|	'run' ID '(' LISTP ')' {$$ = INSTRUCCION.Exec($2, $4,this._$.first_line, (this._$.first_column+1));}
+	|	'run' ID '(' ')' {$$ = INSTRUCCION.Exec($2, null,this._$.first_line, (this._$.first_column+1));}
 ;
 //Pendiente que especifiquen this
 INCREMENTO
@@ -324,11 +323,11 @@ INCREMENTO
 
 
 TIPO
-	: int 		{$$=$1;}
-	| char 		{$$=$1;}
-	| string	{$$=$1;}
-	| double 	{$$=$1;}
-	| boolean {$$=$1;}
+	: int 		{$$ = TIPO_DATO.ENTERO}
+	| char 		{$$ = TIPO_DATO.CARACTER}
+	| string	{$$ = TIPO_DATO.CADENA}
+	| double 	{$$ = TIPO_DATO.DECIMAL}
+	| boolean {$$ = TIPO_DATO.BANDERA}
 ;
 
 LISTID

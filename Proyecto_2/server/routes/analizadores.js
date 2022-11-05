@@ -18,19 +18,23 @@ module.exports=(parser, app)=>{
                 devuelve+="Error "+error.tipo+": "+error.descripcion+"... linea: "+error.linea+" Columna: "+error.columna+"\n"
             });
             const AmbitoGlobal = new Ambito(null)
-            
+            console.log(devuelve);
             devuelve=devuelve+ Global(ast.arbol, AmbitoGlobal,Error,"Global",Simbol)
             var Gdot="digraph mygraph { node [shape=box];\n"
             ast.arbol.forEach(instruccion => {
                 Gdot += Grafico(instruccion,"Raiz","Raiz")
             });
+            // console.log(devuelve);
             Gdot+="\n}"
+            // console.log(Simbol);
             var resultado = {
                 arbol: ast.arbol,
                 errores: Error,
                 Simbol_lit:Simbol,
+                // consola: "print();"
                 consola: devuelve
             }
+            console.log(resultado);
             res.send(resultado)
             //console.log("---------------act-------------------------")
             //console.log(Gdot)

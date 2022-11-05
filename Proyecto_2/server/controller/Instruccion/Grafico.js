@@ -73,7 +73,6 @@ function GDot(instruccion, padre,label_padre){
         }
 
         else if(instruccion.tipo === TIPO_INSTRUCCION.PRINT){
-            console.log(instruccion)
             const nodopadre=padre
             const tipo=instruccion.tipo+instruccion.linea+instruccion.columna
             cadena+=`\"${nodopadre}\" [label= \"${label_padre}\"]; \n` 
